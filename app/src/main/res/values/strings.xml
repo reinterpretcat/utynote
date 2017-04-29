@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">UtyNote</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Search</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example Map Theme settings -->
+    <string name="pref_header_map">Map</string>
+
+    <string name="pref_title_remember_position">Remember position</string>
+    <string name="pref_description_remember_position">Restores the latest map position when app is restarted
+    </string>
+
+    <string name="pref_title_index_path">Index path</string>
+    <string name="pref_default_index_path">Default</string>
+
+    <string name="pref_title_mapcss_theme">Map theme</string>
+    <string-array name="pref_list_mapcss_theme_titles">
+        <item>Default</item>
+        <item>Night</item>
+        <item>Winter</item>
+    </string-array>
+    <string-array name="pref_list_mapcss_theme_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- Example settings for Experimental -->
+    <string name="pref_header_experimental">Experimental</string>
+
+    <string name="pref_title_limit_frame_rate">Limit frame rate</string>
+    <string name="pref_description_limit_frame_rate">Allows to safe battery by limiting frame rate</string>
+
+    <string name="pref_title_frame_rate_count">Frame rate</string>
+    <string-array name="pref_list_frame_rate_count_titles">
+        <item>30</item>
+        <item>20</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="pref_list_frame_rate_count_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>
