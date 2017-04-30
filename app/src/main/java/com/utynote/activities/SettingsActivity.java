@@ -1,4 +1,4 @@
-package com.utynote;
+package com.utynote.activities;
 
 
 import android.annotation.TargetApi;
@@ -20,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.utynote.R;
 
 import java.util.List;
 

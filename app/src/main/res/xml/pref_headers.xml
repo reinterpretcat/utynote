@@ -3,12 +3,12 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.utynote.SettingsActivity$MapPreferenceFragment"
+        android:fragment="com.utynote.activities.SettingsActivity$MapPreferenceFragment"
         android:icon="@drawable/ic_settings_map"
         android:title="@string/pref_header_map" />
 
     <header
-        android:fragment="com.utynote.SettingsActivity$ExperimentalPreferenceFragment"
+        android:fragment="com.utynote.activities.SettingsActivity$ExperimentalPreferenceFragment"
         android:icon="@drawable/ic_settings_experimental"
         android:title="@string/pref_header_experimental" />
 
