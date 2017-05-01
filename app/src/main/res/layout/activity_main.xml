@@ -8,10 +8,34 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <include
-        layout="@layout/drawer_main"
+    <com.utynote.widgets.drawer.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        app:umanoPanelHeight="@dimen/drawer_header_height"
+        app:umanoShadowHeight="4dp"
+        app:umanoParallaxOffset="100dp"
+        app:umanoDragView="@+id/drawerContent"
+        app:umanoAnchorPoint="0.6"
+        app:umanoOverlay="true">
+
+        <FrameLayout
+            android:id="@+id/mainContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <FrameLayout
+            android:id="@id/drawerContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:clickable="true"
+            android:focusable="false"
+            />
+
+    </com.utynote.widgets.drawer.SlidingUpPanelLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
