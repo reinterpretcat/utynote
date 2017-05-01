@@ -15,7 +15,7 @@
  */
 
 
-package com.utynote.widgets.drawer;
+package com.utynote.widgets.panel;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

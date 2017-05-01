@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.utynote.R;
+import com.utynote.components.host.RootView;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -37,12 +38,15 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // NOTE attach to navigation drawer.
-        // TODO break this implicit dependency on navigation drawer
-        DrawerLayout drawer = (DrawerLayout) view.getRootView().findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawer,
+        // NOTE attach to drawer layout.
+        DrawerLayout drawer = ((RootView) getActivity()).getDrawerLayout();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(),
+                drawer,
                 (Toolbar) view.findViewById(R.id.toolbar),
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }

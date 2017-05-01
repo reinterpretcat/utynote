@@ -1,4 +1,4 @@
-package com.utynote.widgets.drawer;
+package com.utynote.widgets.panel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

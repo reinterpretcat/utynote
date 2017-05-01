@@ -2,6 +2,7 @@ package com.utynote.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,34 +10,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.utynote.R;
+import com.utynote.components.host.RootView;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.components.search.SearchFragment;
+import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements RootView,
+        NavigationView.OnNavigationItemSelectedListener {
+
+    private NavigationView mNavigationView;
+    private SlidingUpPanelLayout mSlidingPanel;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingLayout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigationView);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.mainContent, new MapFragment(), MapFragment.TAG)
                 .add(R.id.mainContent, new SearchFragment(), SearchFragment.TAG)
-                .add(R.id.drawerContent, new NearbyFragment(), NearbyFragment.TAG)
+                .add(R.id.panelContent, new NearbyFragment(), NearbyFragment.TAG)
                 .commit();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -59,8 +67,26 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @NonNull
+    @Override
+    public DrawerLayout getDrawerLayout() {
+        return mDrawerLayout;
+    }
+
+    @NonNull
+    @Override
+    public NavigationView getNavigationView() {
+        return mNavigationView;
+    }
+
+    @NonNull
+    @Override
+    public SlidingUpPanelLayout getSlidingPanel() {
+        return mSlidingPanel;
     }
 }

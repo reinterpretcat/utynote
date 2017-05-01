@@ -1,4 +1,4 @@
-package com.utynote.widgets.drawer;
+package com.utynote.widgets.panel;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
