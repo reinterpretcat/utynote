@@ -28,16 +28,16 @@ public class MainActivity extends AppCompatActivity implements RootView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingLayout);
-        mNavigationView = (NavigationView) findViewById(R.id.navigationView);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.mainContent, new MapFragment(), MapFragment.TAG)
-                .add(R.id.mainContent, new SearchFragment(), SearchFragment.TAG)
-                .add(R.id.panelContent, new NearbyFragment(), NearbyFragment.TAG)
+                .add(R.id.main_content, new MapFragment(), MapFragment.TAG)
+                .add(R.id.main_content, new SearchFragment(), SearchFragment.TAG)
+                .add(R.id.panel_content, new NearbyFragment(), NearbyFragment.TAG)
                 .commit();
     }
 

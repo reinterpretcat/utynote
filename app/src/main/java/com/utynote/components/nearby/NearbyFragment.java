@@ -18,7 +18,7 @@ public class NearbyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
         ViewPager viewPager = (ViewPager) inflater
                 .inflate(R.layout.nearby_container_view, container, false)
-                .findViewById(R.id.nearbyContainer);
+                .findViewById(R.id.nearby_container);
         viewPager.setAdapter(new NearbyAdapter(getFragmentManager(), getContext()));
         return viewPager;
     }
