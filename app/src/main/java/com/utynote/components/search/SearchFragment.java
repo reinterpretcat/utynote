@@ -1,6 +1,7 @@
 package com.utynote.components.search;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -15,10 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.utynote.R;
-import com.utynote.app.RootView;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
+
+    public interface Controller {
+        @NonNull
+        DrawerLayout getDrawerLayout();
+    }
 
     @Nullable
     @Override
@@ -38,8 +43,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // NOTE attach to drawer layout.
-        DrawerLayout drawer = ((RootView) getActivity()).getDrawerLayout();
+        DrawerLayout drawer = ((Controller) getActivity()).getDrawerLayout();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(),
                 drawer,
@@ -53,7 +57,7 @@ public class SearchFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.activity_main_appbar, menu);
+        inflater.inflate(R.menu.search_appbar, menu);
     }
 
     @Override

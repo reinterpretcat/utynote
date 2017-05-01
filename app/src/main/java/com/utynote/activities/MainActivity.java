@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements RootView,
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (getDrawerLayout().isDrawerOpen(GravityCompat.START)) {
+            getDrawerLayout().closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements RootView,
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
-        drawer.closeDrawer(GravityCompat.START);
+        getDrawerLayout().closeDrawer(GravityCompat.START);
         return true;
     }
 
