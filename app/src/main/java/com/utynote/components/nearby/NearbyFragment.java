@@ -2,6 +2,7 @@ package com.utynote.components.nearby;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,10 +17,14 @@ public class NearbyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
-        ViewPager viewPager = (ViewPager) inflater
-                .inflate(R.layout.nearby_container_view, container, false)
-                .findViewById(R.id.nearby_container);
+        View view =  inflater.inflate(R.layout.nearby_container_view, container, false);
+
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.nearby_pager);
         viewPager.setAdapter(new NearbyAdapter(getFragmentManager(), getContext()));
-        return viewPager;
+
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.nearby_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        return view;
     }
 }
