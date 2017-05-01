@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.utynote.R;
+import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity
         // TODO think how to handle app flow specific logic
         getSupportFragmentManager()
                 .beginTransaction()
+                .add(R.id.mainContent, new MapFragment(), MapFragment.TAG)
                 .add(R.id.drawerContent, new NearbyFragment(), NearbyFragment.TAG)
                 .commit();
     }
