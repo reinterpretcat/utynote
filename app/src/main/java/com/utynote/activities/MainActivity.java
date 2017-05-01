@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.utynote.R;
-import com.utynote.components.host.RootView;
+import com.utynote.app.RootView;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.components.search.SearchFragment;

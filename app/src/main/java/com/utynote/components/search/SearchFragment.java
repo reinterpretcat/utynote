@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.utynote.R;
-import com.utynote.components.host.RootView;
+import com.utynote.app.RootView;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();

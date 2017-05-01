@@ -1,4 +1,4 @@
-package com.utynote.components.host;
+package com.utynote.app;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
