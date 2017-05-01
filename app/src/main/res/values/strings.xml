@@ -9,7 +9,7 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- Example Map Theme settings -->
+    <!-- Map Theme -->
     <string name="pref_header_map">Map</string>
 
     <string name="pref_title_remember_position">Remember position</string>
@@ -31,7 +31,7 @@
         <item>1</item>
     </string-array>
 
-    <!-- Example settings for Experimental -->
+    <!-- Experimental -->
     <string name="pref_header_experimental">Experimental</string>
 
     <string name="pref_title_limit_frame_rate">Limit frame rate</string>
@@ -48,4 +48,5 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+
 </resources>

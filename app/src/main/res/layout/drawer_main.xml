@@ -9,7 +9,7 @@
     app:umanoPanelHeight="@dimen/drawer_header_height"
     app:umanoShadowHeight="4dp"
     app:umanoParallaxOffset="100dp"
-    app:umanoDragView="@+id/dragView"
+    app:umanoDragView="@+id/drawerContent"
     app:umanoAnchorPoint="0.6"
     app:umanoOverlay="true">
 
@@ -50,14 +50,12 @@
 
     <!-- Drawer content -->
     <FrameLayout
+        android:id="@id/drawerContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        android:orientation="vertical"
         android:clickable="true"
         android:focusable="false"
-        android:id="@+id/dragView">
-
-    </FrameLayout>
+        />
 
 </com.utynote.widgets.drawer.SlidingUpPanelLayout>

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.utynote.R;
+import com.utynote.components.nearby.NearbyFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +45,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // TODO think how to handle app flow specific logic
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.drawerContent, new NearbyFragment(), NearbyFragment.TAG)
+                .commit();
     }
 
     @Override
