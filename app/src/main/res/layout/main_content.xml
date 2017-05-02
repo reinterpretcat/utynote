@@ -18,7 +18,8 @@
         app:umanoParallaxOffset="100dp"
         app:umanoDragView="@+id/drawerContent"
         app:umanoAnchorPoint="0.6"
-        app:umanoOverlay="true">
+        app:umanoOverlay="true"
+        app:umanoFadeColor="@android:color/transparent">
 
         <FrameLayout
             android:id="@+id/main_content"

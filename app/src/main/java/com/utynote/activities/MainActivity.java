@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,15 +15,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.utynote.R;
+import com.utynote.app.OptionMenuBehavior;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
-import com.utynote.components.search.SearchFragment;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SlidingUpPanelLayout mSlidingPanel;
+    private OptionMenuBehavior mOptionMenuBehavior;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -30,14 +31,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_content);
 
+        mOptionMenuBehavior = new OptionMenuBehavior();
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        mOptionMenuBehavior.withSlidingPanel((SlidingUpPanelLayout) findViewById(R.id.sliding_layout));
 
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mOptionMenuBehavior.withToolbar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -52,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_content, new MapFragment(), MapFragment.TAG)
-                .add(R.id.main_content, new SearchFragment(), SearchFragment.TAG)
                 .add(R.id.panel_content, new NearbyFragment(), NearbyFragment.TAG)
                 .commit();
     }
@@ -91,22 +94,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_appbar, menu);
 
-        final MenuItem myActionMenuItem = menu.findItem( R.id.action_search);
-        final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                /*if (!searchView.isIconified()) {
-                    searchView.setIconified(true);
-                }
-                myActionMenuItem.collapseActionView();*/
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
+        mOptionMenuBehavior.useSearchMenuItem(menu.findItem(R.id.action_search));
 
         return true;
     }
