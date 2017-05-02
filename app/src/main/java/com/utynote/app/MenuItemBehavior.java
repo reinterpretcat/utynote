@@ -9,26 +9,27 @@ import android.view.MenuItem;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 /**
- * Provides the way to control states of toolbar and sliding panel.
+ * Provides the way to control the states of toolbar and sliding panel depending on
+ * user interaction with specific menu items.
  */
-public class OptionMenuBehavior {
+public class MenuItemBehavior {
 
     private SlidingUpPanelLayout mSlidingPanel;
     private Toolbar mToolbar;
 
-    public OptionMenuBehavior withToolbar(@NonNull Toolbar toolbar) {
+    public MenuItemBehavior withToolbar(@NonNull Toolbar toolbar) {
         mToolbar = toolbar;
         return this;
     }
 
-    public OptionMenuBehavior withSlidingPanel(@NonNull SlidingUpPanelLayout slidingPanel) {
+    public MenuItemBehavior withSlidingPanel(@NonNull SlidingUpPanelLayout slidingPanel) {
         mSlidingPanel = slidingPanel;
         return this;
     }
 
-    public OptionMenuBehavior useSearchMenuItem(@NonNull MenuItem myActionMenuItem) {
-        final SearchView searchView = (SearchView) myActionMenuItem.getActionView();
-        MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
+    public MenuItemBehavior useSearch(@NonNull MenuItem menuItem) {
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        MenuItemCompat.setOnActionExpandListener(menuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 mSlidingPanel.setParallaxOffset(0);
