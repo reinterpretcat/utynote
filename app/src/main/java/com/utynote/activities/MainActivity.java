@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_content);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_appbar, menu);
+        getMenuInflater().inflate(R.menu.main_appbar, menu);
         return true;
     }
 
