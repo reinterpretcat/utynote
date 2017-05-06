@@ -38,13 +38,9 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         setSupportActionBar(mContentBinding.toolbar);
 
         mContentBinding.navigationView.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,
-                mContentBinding.drawerLayout,
-                (Toolbar) findViewById(R.id.toolbar),
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mContentBinding.drawerLayout,
+                mContentBinding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mContentBinding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -119,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         return checkNotNull(mContentBinding.slidingLayout);
     }
 
-    private <T extends Fragment> void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
+    private void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         getSupportFragmentManager()
                 .beginTransaction()

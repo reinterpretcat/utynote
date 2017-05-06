@@ -16,12 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="bottom"
-            app:umanoPanelHeight="@dimen/drawer_header_height"
+            app:umanoPanelHeight="@dimen/panel_header_height"
             app:umanoShadowHeight="4dp"
-            app:umanoParallaxOffset="100dp"
             app:umanoDragView="@+id/drawerContent"
-            app:umanoAnchorPoint="0.6"
-            app:umanoOverlay="true"
             app:umanoFadeColor="@android:color/transparent">
 
             <FrameLayout

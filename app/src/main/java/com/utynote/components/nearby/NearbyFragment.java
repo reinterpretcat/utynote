@@ -25,7 +25,7 @@ public class NearbyFragment extends Fragment {
         super.onAttach(context);
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
-        panel.setParallaxOffset(200);
+        panel.setParallaxOffset(getResources().getDimensionPixelSize(R.dimen.nearby_panel_paralax));
         panel.setTouchEnabled(true);
         panel.setAnchorPoint(0.6f);
         panel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
