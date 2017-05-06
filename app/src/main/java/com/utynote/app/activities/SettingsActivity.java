@@ -1,4 +1,4 @@
-package com.utynote.activities;
+package com.utynote.app.activities;
 
 
 import android.annotation.TargetApi;
