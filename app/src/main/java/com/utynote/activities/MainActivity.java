@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_content, new MapFragment(), MapFragment.TAG)
-                .add(R.id.panel_content, new NearbyFragment(), NearbyFragment.TAG)
+                .add(R.id.main_content, getFragment(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
+                .add(R.id.panel_content, getFragment(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
                 .commit();
     }
 
@@ -116,10 +116,14 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     }
 
     private void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.panel_content, fragment == null ? factory.call() : fragment, tag)
+                .replace(R.id.panel_content, getFragment(tag, factory), tag)
                 .commit();
+    }
+
+    private Fragment getFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        return fragment == null ? factory.call() : fragment;
     }
 }
