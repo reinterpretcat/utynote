@@ -1,11 +1,11 @@
 package com.utynote.activities;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +17,7 @@ import com.utynote.app.ContentView;
 import com.utynote.app.states.SearchState;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
+import com.utynote.databinding.MainContentBinding;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
@@ -25,34 +26,24 @@ public class MainActivity extends AppCompatActivity implements ContentView,
             NavigationView.OnNavigationItemSelectedListener {
 
     @NonNull private final SearchState mState = new SearchState();
-
-    private DrawerLayout mDrawerLayout;
-    private Toolbar mToolbar;
-    private SlidingUpPanelLayout mSlidingPanel;
+    private MainContentBinding mContentBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_content);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mContentBinding = DataBindingUtil.setContentView(this, R.layout.main_content);
+        setSupportActionBar(mContentBinding.toolbar);
 
-        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
+        mContentBinding.navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
-                mDrawerLayout,
+                mContentBinding.drawerLayout,
                 (Toolbar) findViewById(R.id.toolbar),
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
-        mDrawerLayout.setDrawerListener(toggle);
+        mContentBinding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         mState.bindContent(this);
@@ -66,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (mContentBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mContentBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -90,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         }
 
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        mContentBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -115,12 +106,12 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     @NonNull
     @Override
     public Toolbar getToolbar() {
-        return checkNotNull(mToolbar);
+        return checkNotNull(mContentBinding.toolbar);
     }
 
     @NonNull
     @Override
     public SlidingUpPanelLayout getSlidingPanel() {
-        return checkNotNull(mSlidingPanel);
+        return checkNotNull(mContentBinding.slidingLayout);
     }
 }
