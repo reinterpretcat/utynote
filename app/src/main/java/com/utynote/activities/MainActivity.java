@@ -5,7 +5,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,18 +16,18 @@ import android.view.MenuItem;
 
 import com.utynote.R;
 import com.utynote.app.ContentView;
-import com.utynote.app.states.SearchState;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
+import com.utynote.components.search.SearchFragment;
 import com.utynote.databinding.MainContentBinding;
+import com.utynote.utils.Function;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class MainActivity extends AppCompatActivity implements ContentView,
-            NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener {
 
-    @NonNull private final SearchState mState = new SearchState();
     private MainContentBinding mContentBinding;
 
     @Override
@@ -45,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         mContentBinding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-
-        mState.bindContent(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -88,19 +88,23 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_appbar, menu);
-        mState.bindMenu(menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                replaceFragment(SearchFragment.TAG, SearchFragment::new);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                replaceFragment(NearbyFragment.TAG, NearbyFragment::new);
+                return true;
+            }
+        });
+
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @NonNull
@@ -113,5 +117,13 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     @Override
     public SlidingUpPanelLayout getSlidingPanel() {
         return checkNotNull(mContentBinding.slidingLayout);
+    }
+
+    private <T extends Fragment> void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.panel_content, fragment == null ? factory.call() : fragment, tag)
+                .commit();
     }
 }
