@@ -13,33 +13,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.utynote.R;
-import com.utynote.app.MenuItemBehavior;
+import com.utynote.app.ContentView;
+import com.utynote.app.states.SearchState;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static com.utynote.utils.Preconditions.checkNotNull;
 
-    private MenuItemBehavior mOptionMenuBehavior;
+public class MainActivity extends AppCompatActivity implements ContentView,
+            NavigationView.OnNavigationItemSelectedListener {
+
+    @NonNull private final SearchState mState = new SearchState();
+
     private DrawerLayout mDrawerLayout;
+    private Toolbar mToolbar;
+    private SlidingUpPanelLayout mSlidingPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_content);
 
-        mOptionMenuBehavior = new MenuItemBehavior();
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mOptionMenuBehavior.withSlidingPanel((SlidingUpPanelLayout) findViewById(R.id.sliding_layout));
+
+        mSlidingPanel = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
         NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mOptionMenuBehavior.withToolbar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity
 
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
+
+        mState.bindContent(this);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -91,9 +97,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_appbar, menu);
-
-        mOptionMenuBehavior.useSearch(menu.findItem(R.id.action_search));
-
+        mState.bindMenu(menu);
         return true;
     }
 
@@ -106,5 +110,17 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @NonNull
+    @Override
+    public Toolbar getToolbar() {
+        return checkNotNull(mToolbar);
+    }
+
+    @NonNull
+    @Override
+    public SlidingUpPanelLayout getSlidingPanel() {
+        return checkNotNull(mSlidingPanel);
     }
 }
