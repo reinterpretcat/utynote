@@ -14,22 +14,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.utynote.R;
+import com.utynote.app.AppRoot;
 import com.utynote.app.ContentView;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class SearchFragment extends Fragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
 
+    @Inject SearchPresenter mPresenter;
     @NonNull private final SearchAdapter mAdapter = new SearchAdapter();
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        ((AppRoot) getActivity().getApplication()).getSearchComponent().inject(this);
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         Toolbar toolbar = getContentView().getToolbar();
@@ -42,7 +48,6 @@ public class SearchFragment extends Fragment {
         panel.setTouchEnabled(false);
         panel.setAnchorPoint(anchor);
         panel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-
     }
 
     @Nullable

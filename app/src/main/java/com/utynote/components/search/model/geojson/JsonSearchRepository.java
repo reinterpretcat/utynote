@@ -5,15 +5,14 @@ import android.support.annotation.NonNull;
 import com.utynote.components.search.model.SearchRepository;
 import com.utynote.components.search.model.SearchResult;
 
-
 import rx.Observable;
 
-public class GeoJsonSearchRepository implements SearchRepository {
-    @NonNull
-    private final SearchService mService;
+public class JsonSearchRepository implements SearchRepository {
 
-    public GeoJsonSearchRepository(@NonNull SearchService mService) {
-        this.mService = mService;
+    private SearchService mService;
+
+    public JsonSearchRepository(@NonNull SearchService service) {
+        mService = service;
     }
 
     @NonNull
