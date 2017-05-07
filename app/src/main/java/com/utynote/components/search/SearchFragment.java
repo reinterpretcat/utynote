@@ -66,7 +66,12 @@ public class SearchFragment extends Fragment {
     private void addFakeData() {
         List<SearchItemModel> searchItems = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            searchItems.add(SearchItemModel.getBuilder().withTitle(new SpannableString("Item " + i)).build());
+            searchItems.add(SearchItemModel.getBuilder()
+                    .withPrimaryTitle(new SpannableString("Title " + i))
+                    .withSecondaryTitle(new SpannableString(""))
+                    .withPrimarySubtitle(new SpannableString("Primary subtitle " + i))
+                    .withSecondarySubtitle(new SpannableString("Secondary subtitle " + i))
+                    .build());
         }
         mAdapter.setData(searchItems);
     }

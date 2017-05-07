@@ -49,4 +49,7 @@
         <item>1</item>
     </string-array>
 
+    <!-- Search -->
+    <string name="search_result_item_icon">Search result item icon</string>
+
 </resources>

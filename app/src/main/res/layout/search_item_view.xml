@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 <data>
     <variable name="model" type="com.utynote.components.search.SearchItemModel" />
 </data>
@@ -10,13 +11,58 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="4dp">
+        android:layout_margin="5dp"
+        card_view:cardBackgroundColor="@color/cardview_light_background"
+        card_view:cardCornerRadius="4dp"
+        card_view:contentPadding="10dp">
 
-        <TextView
-            android:id="@+id/title"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@{model.title}"/>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/primaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="@{model.primaryTitle}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Berlin"/>
+
+            <TextView
+                android:id="@+id/secondaryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="@{model.secondaryTitle}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Desc"/>
+
+            <TextView
+                android:id="@+id/primarySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/primaryTitle"
+                android:layout_marginTop="10dp"
+                android:text="@{model.primarySubtitle}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                tools:text="Germany"/>
+
+            <TextView
+                android:id="@+id/secondarySubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/secondaryTitle"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:text="@{model.secondarySubtitle}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                tools:text="position: 52.5233, 13.41377"/>
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
