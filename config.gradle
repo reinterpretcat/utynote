@@ -29,6 +29,7 @@ ext {
             ],
             rxandroid : 'io.reactivex:rxandroid:1.2.1',
             rxjava    : 'io.reactivex:rxjava:1.1.6',
+            streams   : 'com.annimon:stream:1.1.7',
             gson      : 'com.google.code.gson:gson:2.7',
             google : [
                     maps: 'com.google.android.gms:play-services-maps:10.0.1'
@@ -44,6 +45,7 @@ ext {
     deps.test = [
             junit : [
                     lib : 'junit:junit:4.12'
-            ]
+            ],
+            hamcrest : 'org.hamcrest:hamcrest-library:1.3'
     ]
 }

@@ -13,18 +13,30 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     dataBinding {
         enabled = true
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    productFlavors {
+        mock {
+            applicationIdSuffix = ".mock"
+        }
+        prod {
+
+        }
     }
 }
 
@@ -42,10 +54,13 @@ dependencies {
     compile deps.app.google.maps
 
     testCompile deps.test.junit.lib
+    testCompile deps.test.hamcrest
 
     compile deps.app.retrofit.lib
     compile deps.app.retrofit.converter_gson
     compile deps.app.retrofit.adapter_rxjava
+
+    compile deps.app.streams
 
     compile deps.app.rxandroid
     compile deps.app.rxjava
