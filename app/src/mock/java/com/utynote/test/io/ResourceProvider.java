@@ -3,42 +3,45 @@ package com.utynote.test.io;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.Stream;
-import com.annimon.stream.function.Function;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public final class AssetProvider {
+import static com.utynote.utils.Preconditions.checkNotNull;
+
+public final class ResourceProvider {
     @NonNull
     public static String readString(@NonNull String path) {
         return Stream.of(path)
-                .map(Function.Util.safe(FileInputStream::new))
+                .map(ResourceProvider::createStream)
                 .map(InputStreamReader::new)
                 .map(BufferedReader::new)
-                .map(bufferedReader -> {
+                .map(reader -> {
                     StringBuilder text = new StringBuilder();
                     try {
                         String line;
-                        while ((line = bufferedReader.readLine()) != null) {
+                        while ((line = reader.readLine()) != null) {
                             text.append(line);
                             text.append('\n');
                         }
-                        bufferedReader.close();
+                        reader.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     return text.toString();
-                }).single();
+                })
+                .findFirst()
+                .get();
     }
 
     @NonNull
     public static byte[] readBytes(@NonNull String path) {
         return Stream.of(path)
-                .map(Function.Util.safe(FileInputStream::new))
+                .map(ResourceProvider::createStream)
                 .map(is -> {
                     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
                     try {
@@ -52,6 +55,13 @@ public final class AssetProvider {
                         e.printStackTrace();
                     }
                     return buffer.toByteArray();
-                }).single();
+                })
+                .findFirst()
+                .get();
+    }
+
+    @NonNull
+    private static InputStream createStream(@NonNull String path) {
+        return checkNotNull(ResourceProvider.class.getClassLoader().getResourceAsStream(path));
     }
 }

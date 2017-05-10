@@ -2,15 +2,26 @@ package com.utynote.test.network;
 
 import android.support.annotation.NonNull;
 
-import com.utynote.test.io.AssetProvider;
+import com.annimon.stream.Stream;
+import com.utynote.test.io.ResourceProvider;
+import com.utynote.utils.ArrayUtils;
+
+import java.util.ArrayList;
 
 
 public final class HttpInterceptorFactory {
 
     public static HttpInterceptor create(@NonNull String assetPath) {
-        String headers = AssetProvider.readString(assetPath);
-        byte[] body = AssetProvider.readBytes(assetPath);
+        String[] headers = Stream.of(ResourceProvider.readString(assetPath + ".headers"))
+                .map(s -> s.split("\n"))
+                .scan(new ArrayList<String>(), ArrayUtils::merge)
+                .flatMap(Stream::of)
+                .map(s -> s.split(":", 1))
+                .reduce(new ArrayList<String>(), ArrayUtils::merge)
+                .toArray(new String[0]);
 
-        return new HttpInterceptor(null, null, body);
+        byte[] body = ResourceProvider.readBytes(assetPath + ".body");
+
+        return new HttpInterceptor(headers, null, body);
     }
 }
