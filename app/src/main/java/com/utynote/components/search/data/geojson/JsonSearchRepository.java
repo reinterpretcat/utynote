@@ -21,7 +21,6 @@ public class JsonSearchRepository implements SearchRepository {
         // TODO map results.
         return mService
                 .search(term)
-                .map(data -> SearchResult.getBuilder()
-                        .build());
+                .map(data -> SearchResult.getBuilder().build());
     }
 }

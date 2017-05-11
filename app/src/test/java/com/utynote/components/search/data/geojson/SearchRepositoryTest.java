@@ -3,6 +3,7 @@ package com.utynote.components.search.data.geojson;
 
 import com.utynote.components.search.data.SearchRepository;
 import com.utynote.components.search.data.SearchResult;
+import com.utynote.entities.GeoCoordinate;
 import com.utynote.test.annotations.HttpResponse;
 import com.utynote.test.core.AnnotationHandler;
 import com.utynote.test.dependencies.SearchComponentFactory;
@@ -10,6 +11,8 @@ import com.utynote.test.dependencies.SearchComponentFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,8 +42,12 @@ public class SearchRepositoryTest {
                 .search("Berlin")
                 .subscribe(subscriber);
 
+        subscriber.assertNoErrors();
         assertThat(subscriber.getOnNextEvents(), hasItem(SearchResult
                 .getBuilder()
+                .withName("Berlin")
+                .withCountry("Germany")
+                .withGeoCoordinate(new GeoCoordinate(52, 13))
                 .build()));
     }
 }

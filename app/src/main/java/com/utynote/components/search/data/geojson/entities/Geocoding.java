@@ -20,6 +20,6 @@ public class Geocoding {
     public Engine engine;
     @SerializedName("timestamp")
     @Expose
-    public Integer timestamp;
+    public long timestamp;
 
 }

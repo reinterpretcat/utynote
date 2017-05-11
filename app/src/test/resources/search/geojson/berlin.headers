@@ -1,18 +1,4 @@
 charset: utf8
 Content-Type: application/json; charset=utf-8
 X-Powered-By: mapzen
-Content-Length: 1375
-Date: Tue, 09 May 2017 20:52:02 GMT
-Age: 345033
-Connection: keep-alive
-Cache-Control: public, max-age=120
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Credentials: true
-Access-Control-Allow-Methods: GET, HEAD
-Access-Control-Allow-Headers: Authorization, Content-Type, Accept, Origin, User-Agent, Cache-Control, Keep-Alive, If-Modified-Since, If-None-Match, X-Requested-With
-Access-Control-Expose-Headers: Content-Type, Cache-Control, ETag, Expires, Last-Modified, Content-Length, X-ApiaxleProxy-Qpd-Left, X-ApiaxleProxy-Qpm-Left, X-ApiaxleProxy-Qps-Left, X-Cache
-X-Served-By: cache-fra1232-FRA
-X-Cache: HIT
-X-Cache-Hits: 1
-X-Timer: S1494363122.249144,VS0,VE1
-Vary: Accept-Encoding
+Content-Length: 7158
