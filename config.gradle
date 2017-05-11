@@ -19,8 +19,7 @@ ext {
                     converter_gson :  "com.squareup.retrofit2:converter-gson:${deps.versions.retrofit}",
                     adapter_rxjava :  "com.squareup.retrofit2:adapter-rxjava:${deps.versions.retrofit}"
             ],
-            rxjava    : 'io.reactivex:rxjava:1.1.6',
-            streams   : 'com.annimon:stream:1.1.7'
+            rxjava    : 'io.reactivex:rxjava:1.1.6'
     ]
 
     deps.app = [

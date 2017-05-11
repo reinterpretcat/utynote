@@ -1,6 +1,5 @@
 package com.utynote.test.core;
 
-import com.annimon.stream.Stream;
 import com.utynote.app.dependencies.NetModule;
 import com.utynote.test.annotations.HttpResponse;
 import com.utynote.test.network.HttpInterceptorFactory;
@@ -8,6 +7,8 @@ import com.utynote.test.network.HttpInterceptorFactory;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import rx.Observable;
 
 
 /**
@@ -17,8 +18,8 @@ public class AnnotationHandler extends TestWatcher {
     @Override
     public Statement apply(Statement base, Description description) {
 
-        Stream.of(description.getAnnotations())
-                .select(HttpResponse.class)
+        Observable.from(description.getAnnotations())
+                .ofType(HttpResponse.class)
                 .forEach(a -> NetModule.setInterceptor(HttpInterceptorFactory.create(a.path())));
 
         return super.apply(base, description);

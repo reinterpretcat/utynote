@@ -2,20 +2,20 @@ package com.utynote.test.io;
 
 import android.support.annotation.NonNull;
 
-import com.annimon.stream.Stream;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import rx.Observable;
+
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public final class ResourceProvider {
     @NonNull
     public static String readString(@NonNull String path) {
-        return Stream.of(path)
+        return Observable.just(path)
                 .map(ResourceProvider::createStream)
                 .map(InputStreamReader::new)
                 .map(BufferedReader::new)
@@ -34,13 +34,13 @@ public final class ResourceProvider {
 
                     return text.toString();
                 })
-                .findFirst()
-                .get();
+                .toBlocking()
+                .first();
     }
 
     @NonNull
     public static byte[] readBytes(@NonNull String path) {
-        return Stream.of(path)
+        return Observable.just(path)
                 .map(ResourceProvider::createStream)
                 .map(is -> {
                     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -56,8 +56,8 @@ public final class ResourceProvider {
                     }
                     return buffer.toByteArray();
                 })
-                .findFirst()
-                .get();
+                .toBlocking()
+                .first();
     }
 
     @NonNull

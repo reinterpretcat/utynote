@@ -61,8 +61,6 @@ dependencies {
     compile deps.tools.retrofit.converter_gson
     compile deps.tools.retrofit.adapter_rxjava
 
-    compile deps.tools.streams
-
     compile deps.app.rxandroid
     compile deps.tools.rxjava
 
