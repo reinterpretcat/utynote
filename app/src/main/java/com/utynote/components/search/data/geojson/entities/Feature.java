@@ -1,21 +1,21 @@
 
-package com.utynote.components.search.model.geojson.entities;
+package com.utynote.components.search.data.geojson.entities;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SearchData {
+public class Feature {
 
-    @SerializedName("geocoding")
-    @Expose
-    public Geocoding geocoding;
     @SerializedName("type")
     @Expose
     public String type;
-    @SerializedName("features")
+    @SerializedName("geometry")
     @Expose
-    public List<Feature> features = null;
+    public Geometry geometry;
+    @SerializedName("properties")
+    @Expose
+    public Properties properties;
     @SerializedName("bbox")
     @Expose
     public List<Double> bbox = null;

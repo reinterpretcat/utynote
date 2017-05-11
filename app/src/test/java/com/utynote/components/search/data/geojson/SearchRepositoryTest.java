@@ -1,8 +1,8 @@
-package com.utynote.components.search.model.geojson;
+package com.utynote.components.search.data.geojson;
 
 
-import com.utynote.components.search.model.SearchRepository;
-import com.utynote.components.search.model.SearchResult;
+import com.utynote.components.search.data.SearchRepository;
+import com.utynote.components.search.data.SearchResult;
 import com.utynote.test.annotations.HttpResponse;
 import com.utynote.test.core.AnnotationHandler;
 import com.utynote.test.dependencies.SearchComponentFactory;

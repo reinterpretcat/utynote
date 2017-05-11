@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.utynote.app.AppConfig;
 import com.utynote.components.search.SearchPresenter;
-import com.utynote.components.search.model.SearchRepository;
-import com.utynote.components.search.model.geojson.JsonSearchRepository;
-import com.utynote.components.search.model.geojson.SearchService;
+import com.utynote.components.search.data.SearchRepository;
+import com.utynote.components.search.data.geojson.JsonSearchRepository;
+import com.utynote.components.search.data.geojson.SearchService;
 
 import javax.inject.Singleton;
 

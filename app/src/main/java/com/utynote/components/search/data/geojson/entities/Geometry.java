@@ -1,5 +1,5 @@
 
-package com.utynote.components.search.model.geojson.entities;
+package com.utynote.components.search.data.geojson.entities;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

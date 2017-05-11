@@ -1,9 +1,9 @@
-package com.utynote.components.search.model.geojson;
+package com.utynote.components.search.data.geojson;
 
 
 import android.support.annotation.NonNull;
 
-import com.utynote.components.search.model.geojson.entities.SearchData;
+import com.utynote.components.search.data.geojson.entities.SearchData;
 
 
 import retrofit2.http.GET;
