@@ -2,6 +2,7 @@ package com.utynote.app;
 
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
 import com.utynote.app.dependencies.AppModule;
 import com.utynote.app.dependencies.LibModule;
@@ -17,12 +18,15 @@ public class AppRoot extends Application {
     public void onCreate() {
         super.onCreate();
 
+        AppConfig config = new AppConfig.Builder()
+                .withSearch("https://search.mapzen.com/v1/", "geojson")
+                .build();
+
         mSearchComponent = DaggerSearchComponent.builder()
                 .appModule(new AppModule(this))
                 .netModule(new NetModule())
                 .libModule(new LibModule())
-                .searchModule(new SearchModule("https://search.mapzen.com/v1/",
-                                                SearchModule.JSON_RESPONSE_TYPE))
+                .searchModule(new SearchModule(config.search))
                 .build();
     }
 

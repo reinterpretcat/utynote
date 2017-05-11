@@ -1,7 +1,7 @@
 package com.utynote.components.search.model.geojson;
 
 
-import com.utynote.app.dependencies.search.SearchModule;
+import com.utynote.app.AppRoot;
 import com.utynote.components.search.model.SearchRepository;
 import com.utynote.components.search.model.SearchResult;
 import com.utynote.test.annotations.HttpResponse;
@@ -26,7 +26,9 @@ public class SearchRepositoryTest {
 
     @Before
     public void setup() {
-        SearchComponentFactory.create(SearchModule.JSON_RESPONSE_TYPE).inject(this);
+        SearchComponentFactory
+                .create("https://search.mapzen.com/v1/", "geojson")
+                .inject(this);
     }
 
     @HttpResponse(path = "search/geojson/berlin")
