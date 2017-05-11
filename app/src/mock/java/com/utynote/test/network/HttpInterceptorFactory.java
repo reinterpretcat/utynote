@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public final class HttpInterceptorFactory {
 
     public static HttpInterceptor create(@NonNull String assetPath) {
+        // Split headers file content into string array using '\n' and first ':' in line
         String[] headers = Stream.of(ResourceProvider.readString(assetPath + ".headers"))
                 .map(s -> s.split("\n"))
                 .scan(new ArrayList<String>(), ArrayUtils::merge)

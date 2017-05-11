@@ -1,5 +1,7 @@
 package com.utynote.app.dependencies.search;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.Gson;
 import com.utynote.components.search.SearchPresenter;
 import com.utynote.components.search.model.SearchRepository;
@@ -17,10 +19,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class SearchModule {
-    private String mBaseUrl;
 
-    public SearchModule(String baseUrl) {
-        this.mBaseUrl = baseUrl;
+    @NonNull private final String mBaseUrl;
+    @NonNull private final String mFormatType;
+
+    @NonNull public static final String JSON_RESPONSE_TYPE = "geojson";
+
+    public SearchModule(@NonNull String baseUrl, @NonNull String formatType) {
+        mBaseUrl = baseUrl;
+        mFormatType = formatType;
     }
 
     @Provides
@@ -38,6 +45,9 @@ public class SearchModule {
     @Provides
     @Singleton
     SearchRepository providesRepository(SearchService searchService) {
+        if (!JSON_RESPONSE_TYPE.equals(mFormatType)) {
+            throw new UnsupportedOperationException();
+        }
         return new JsonSearchRepository(searchService);
     }
 

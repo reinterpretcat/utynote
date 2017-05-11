@@ -4,6 +4,7 @@ package com.utynote.app;
 import android.app.Application;
 
 import com.utynote.app.dependencies.AppModule;
+import com.utynote.app.dependencies.LibModule;
 import com.utynote.app.dependencies.NetModule;
 import com.utynote.app.dependencies.search.DaggerSearchComponent;
 import com.utynote.app.dependencies.search.SearchComponent;
@@ -19,7 +20,9 @@ public class AppRoot extends Application {
         mSearchComponent = DaggerSearchComponent.builder()
                 .appModule(new AppModule(this))
                 .netModule(new NetModule())
-                .searchModule(new SearchModule("https://search.mapzen.com/v1/"))
+                .libModule(new LibModule())
+                .searchModule(new SearchModule("https://search.mapzen.com/v1/",
+                                                SearchModule.JSON_RESPONSE_TYPE))
                 .build();
     }
 

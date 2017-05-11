@@ -8,12 +8,22 @@ ext {
             retrofit : '2.2.0'
     ]
 
-    deps.app = [
+    deps.tools = [
             dagger  : [
                     annotations : 'javax.annotation:jsr250-api:1.0',
                     lib         : "com.google.dagger:dagger:${deps.versions.dagger}",
                     compiler    : "com.google.dagger:dagger-compiler:${deps.versions.dagger}"
             ],
+            retrofit: [
+                    lib            :  "com.squareup.retrofit2:retrofit:${deps.versions.retrofit}",
+                    converter_gson :  "com.squareup.retrofit2:converter-gson:${deps.versions.retrofit}",
+                    adapter_rxjava :  "com.squareup.retrofit2:adapter-rxjava:${deps.versions.retrofit}"
+            ],
+            rxjava    : 'io.reactivex:rxjava:1.1.6',
+            streams   : 'com.annimon:stream:1.1.7'
+    ]
+
+    deps.app = [
             support : [
                     appcompat         : "com.android.support:appcompat-v7:${deps.versions.support}",
                     cardview          : "com.android.support:cardview-v7:${deps.versions.support}",
@@ -22,18 +32,12 @@ ext {
                     v4                : "com.android.support:support-v4:${deps.versions.support}",
                     vector_drawable   : "com.android.support:support-vector-drawable:${deps.versions.support}"
             ],
-            retrofit: [
-                    lib            :  "com.squareup.retrofit2:retrofit:${deps.versions.retrofit}",
-                    converter_gson :  "com.squareup.retrofit2:converter-gson:${deps.versions.retrofit}",
-                    adapter_rxjava :  "com.squareup.retrofit2:adapter-rxjava:${deps.versions.retrofit}"
-            ],
-            rxandroid : 'io.reactivex:rxandroid:1.2.1',
-            rxjava    : 'io.reactivex:rxjava:1.1.6',
-            streams   : 'com.annimon:stream:1.1.7',
-            gson      : 'com.google.code.gson:gson:2.7',
+
             google : [
                     maps: 'com.google.android.gms:play-services-maps:10.0.1'
-            ]
+            ],
+            gson      : 'com.google.code.gson:gson:2.7',
+            rxandroid : 'io.reactivex:rxandroid:1.2.1'
     ]
 
     deps.androidTest = [

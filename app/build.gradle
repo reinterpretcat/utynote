@@ -55,19 +55,20 @@ dependencies {
 
     testCompile deps.test.junit.lib
     testCompile deps.test.hamcrest
+    testAnnotationProcessor deps.tools.dagger.compiler
 
-    compile deps.app.retrofit.lib
-    compile deps.app.retrofit.converter_gson
-    compile deps.app.retrofit.adapter_rxjava
+    compile deps.tools.retrofit.lib
+    compile deps.tools.retrofit.converter_gson
+    compile deps.tools.retrofit.adapter_rxjava
 
-    compile deps.app.streams
+    compile deps.tools.streams
 
     compile deps.app.rxandroid
-    compile deps.app.rxjava
+    compile deps.tools.rxjava
 
     compile deps.app.google.maps
 
-    compile deps.app.dagger.lib
-    annotationProcessor deps.app.dagger.compiler
-    provided deps.app.dagger.annotations
+    compile deps.tools.dagger.lib
+    annotationProcessor deps.tools.dagger.compiler
+    provided deps.tools.dagger.annotations
 }

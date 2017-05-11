@@ -1,23 +1,33 @@
 package com.utynote.components.search.model.geojson;
 
 
+import com.utynote.app.dependencies.search.SearchModule;
+import com.utynote.components.search.model.SearchRepository;
 import com.utynote.components.search.model.SearchResult;
 import com.utynote.test.annotations.HttpResponse;
 import com.utynote.test.core.AnnotationHandler;
+import com.utynote.test.dependencies.SearchComponentFactory;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import javax.inject.Inject;
 
 import rx.observers.TestSubscriber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 
-public class JsonSearchRepositoryTest {
+public class SearchRepositoryTest {
 
-    public @Rule final AnnotationHandler mRule = new AnnotationHandler();
+    @Rule public final AnnotationHandler mRule = new AnnotationHandler();
+    @Inject public SearchRepository mRepository;
 
-    JsonSearchRepository mRepository;
+    @Before
+    public void setup() {
+        SearchComponentFactory.create(SearchModule.JSON_RESPONSE_TYPE).inject(this);
+    }
 
     @HttpResponse(path = "search/geojson/berlin")
     @Test
