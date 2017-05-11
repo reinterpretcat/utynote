@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.utynote.R;
 import com.utynote.app.AppRoot;
-import com.utynote.app.ContentView;
+import com.utynote.components.ContentView;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;

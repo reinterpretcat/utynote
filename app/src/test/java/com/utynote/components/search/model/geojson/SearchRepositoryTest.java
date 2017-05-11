@@ -1,7 +1,6 @@
 package com.utynote.components.search.model.geojson;
 
 
-import com.utynote.app.AppRoot;
 import com.utynote.components.search.model.SearchRepository;
 import com.utynote.components.search.model.SearchResult;
 import com.utynote.test.annotations.HttpResponse;

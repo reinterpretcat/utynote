@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.utynote.R;
-import com.utynote.app.ContentView;
+import com.utynote.components.ContentView;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.components.search.SearchFragment;

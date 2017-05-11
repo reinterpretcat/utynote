@@ -1,4 +1,4 @@
-package com.utynote.app;
+package com.utynote.components;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
