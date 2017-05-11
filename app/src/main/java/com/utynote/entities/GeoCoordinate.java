@@ -9,4 +9,22 @@ public class GeoCoordinate {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !GeoCoordinate.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+
+        GeoCoordinate other = (GeoCoordinate) obj;
+        return latitude == other.latitude && longitude == other.longitude;
+    }
+
+    @Override
+    public int hashCode() {
+        long hash = 3;
+        hash = 53 * hash + Double.doubleToLongBits(latitude);
+        hash = 53 * hash + Double.doubleToLongBits(longitude);
+        return Long.valueOf(hash).hashCode();
+    }
 }

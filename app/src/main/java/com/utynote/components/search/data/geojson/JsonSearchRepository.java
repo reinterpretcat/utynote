@@ -22,12 +22,13 @@ public class JsonSearchRepository implements SearchRepository {
         return mService
                 .search(term)
                 .flatMap(data -> Observable.from(data.features))
-                .filter(f -> "Point".equals(f.type))
+                .filter(f -> "Point".equals(f.geometry.type))
                 .map(f -> SearchResult.getBuilder()
+                        .withId(f.properties.id)
                         .withName(f.properties.name)
                         .withCountry(f.properties.country)
-                        .withGeoCoordinate(new GeoCoordinate(f.geometry.coordinates.get(0),
-                                                             f.geometry.coordinates.get(1)))
+                        .withGeoCoordinate(new GeoCoordinate(f.geometry.coordinates.get(1),
+                                                             f.geometry.coordinates.get(0)))
                         .build());
     }
 }

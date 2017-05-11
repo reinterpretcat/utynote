@@ -43,11 +43,11 @@ public class SearchRepositoryTest {
                 .subscribe(subscriber);
 
         subscriber.assertNoErrors();
-        assertThat(subscriber.getOnNextEvents(), hasItem(SearchResult
-                .getBuilder()
+        assertThat(subscriber.getOnNextEvents(), hasItem(SearchResult.getBuilder()
+                .withId("101748799")
                 .withName("Berlin")
                 .withCountry("Germany")
-                .withGeoCoordinate(new GeoCoordinate(52, 13))
+                .withGeoCoordinate(new GeoCoordinate(52.52045, 13.40732))
                 .build()));
     }
 }
