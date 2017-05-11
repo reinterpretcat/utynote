@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.utynote.components.search.data.SearchRepository;
 import com.utynote.components.search.data.SearchResult;
+import com.utynote.entities.GeoCoordinate;
 
 import rx.Observable;
 
@@ -18,9 +19,15 @@ public class JsonSearchRepository implements SearchRepository {
     @NonNull
     @Override
     public Observable<SearchResult> search(@NonNull String term) {
-        // TODO map results.
         return mService
                 .search(term)
-                .map(data -> SearchResult.getBuilder().build());
+                .flatMap(data -> Observable.from(data.features))
+                .filter(f -> "Point".equals(f.type))
+                .map(f -> SearchResult.getBuilder()
+                        .withName(f.properties.name)
+                        .withCountry(f.properties.country)
+                        .withGeoCoordinate(new GeoCoordinate(f.geometry.coordinates.get(0),
+                                                             f.geometry.coordinates.get(1)))
+                        .build());
     }
 }
