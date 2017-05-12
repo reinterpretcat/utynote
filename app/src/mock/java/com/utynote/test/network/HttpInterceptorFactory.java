@@ -3,7 +3,7 @@ package com.utynote.test.network;
 import android.support.annotation.NonNull;
 
 import com.utynote.test.io.ResourceProvider;
-import com.utynote.utils.ArrayUtils;
+import com.utynote.utils.Sequences;
 
 import java.util.ArrayList;
 
@@ -16,10 +16,10 @@ public final class HttpInterceptorFactory {
         // Split headers file content into string array using '\n' and first ':' in line
         String[] headers = Observable.just(ResourceProvider.readString(assetPath + ".headers"))
                 .map(s -> s.split("\n"))
-                .scan(new ArrayList<String>(), ArrayUtils::merge)
+                .scan(new ArrayList<String>(), Sequences::merge)
                 .flatMap(Observable::from)
                 .map(s -> s.split(":", 1))
-                .reduce(new ArrayList<String>(), ArrayUtils::merge)
+                .reduce(new ArrayList<String>(), Sequences::merge)
                 .toBlocking()
                 .single()
                 .toArray(new String[0]);

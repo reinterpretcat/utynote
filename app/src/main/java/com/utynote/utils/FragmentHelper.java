@@ -19,19 +19,23 @@ public final class FragmentHelper {
     }
 
     @NonNull
-    public <T extends Fragment> T findFragment(@NonNull String tag, Class<T> type) {
+    public <T extends Fragment> T find(@NonNull String tag, Class<T> type) {
         return type.cast(checkNotNull(mFragmentManager.findFragmentByTag(tag)));
     }
 
-    public void replaceFragment(@NonNull String tag, Func0<Fragment> factory) {
+    public void replace(@NonNull String tag, Func0<Fragment> factory) {
         mFragmentManager
                 .beginTransaction()
-                .replace(R.id.panel_content, getFragment(tag, factory), tag)
+                .replace(R.id.panel_content, get(tag, factory), tag)
                 .commit();
     }
 
+    public boolean has(@NonNull String tag) {
+        return mFragmentManager.findFragmentByTag(tag) != null;
+    }
+
     @NonNull
-    public Fragment getFragment(@NonNull String tag, Func0<Fragment> factory) {
+    public Fragment get(@NonNull String tag, Func0<Fragment> factory) {
         Fragment fragment = mFragmentManager.findFragmentByTag(tag);
         return fragment == null ? factory.call() : fragment;
     }

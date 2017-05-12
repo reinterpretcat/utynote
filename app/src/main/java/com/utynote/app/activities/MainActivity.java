@@ -10,13 +10,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jakewharton.rxbinding2.support.v4.view.RxMenuItemCompat;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.jakewharton.rxbinding2.view.MenuItemActionViewCollapseEvent;
 import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent;
-import com.jakewharton.rxbinding2.view.RxMenuItem;
 import com.utynote.R;
 import com.utynote.app.AppRoot;
 import com.utynote.components.ContentView;
@@ -55,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_content, mFragmentHelper.getFragment(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
-                .add(R.id.panel_content, mFragmentHelper.getFragment(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
+                .add(R.id.main_content, mFragmentHelper.get(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
+                .add(R.id.panel_content, mFragmentHelper.get(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
                 .commit();
     }
 
@@ -96,21 +98,22 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
-        RxMenuItem.actionViewEvents(searchMenuItem)
+        RxMenuItemCompat.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewExpandEvent.class)
-                .subscribe(e -> mFragmentHelper.replaceFragment(SearchFragment.TAG, () -> {
+                .subscribe(e -> mFragmentHelper.replace(SearchFragment.TAG, () -> {
                     SearchFragment fragment = new SearchFragment();
                     ((AppRoot) getApplication()).getSearchComponent().inject(fragment);
                     return fragment;
                 }));
 
-        RxMenuItem.actionViewEvents(searchMenuItem)
+        RxMenuItemCompat.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewCollapseEvent.class)
-                .subscribe(e -> mFragmentHelper.replaceFragment(NearbyFragment.TAG, NearbyFragment::new));
+                .subscribe(e -> mFragmentHelper.replace(NearbyFragment.TAG, NearbyFragment::new));
 
-        RxSearchView.queryTextChanges((SearchView) searchMenuItem.getActionView())
+        RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
+                .filter(e -> !TextUtils.isEmpty(e.queryText()))
                 .debounce(1, TimeUnit.SECONDS)
-                .subscribe(mFragmentHelper.findFragment(SearchFragment.TAG, SearchFragment.class)::onSearchTerm);
+                .subscribe(e -> mFragmentHelper.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
 
         return true;
     }

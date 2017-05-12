@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.utynote.R;
 import com.utynote.components.ContentView;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,14 +23,29 @@ import javax.inject.Inject;
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class SearchFragment extends Fragment {
+
     public static final String TAG = SearchFragment.class.getSimpleName();
 
-    @Inject SearchPresenter mPresenter;
+    @Nullable @Inject SearchPresenter mPresenter;
     @NonNull private final SearchAdapter mAdapter = new SearchAdapter();
+
+    private final SearchContract.View m_searchView = new SearchContract.View() {
+        @Override
+        public void showResults(@NonNull List<SearchItemModel> results) {
+            mAdapter.setData(results);
+        }
+
+        @Override
+        public void showError(@NonNull String description) {
+            // TODO
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        getPresenter().attach(m_searchView);
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         Toolbar toolbar = getContentView().getToolbar();
@@ -47,20 +60,23 @@ public class SearchFragment extends Fragment {
         panel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getPresenter().detach();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.search_container_view, container, false);
-
         recyclerView.setAdapter(mAdapter);
-
-        addFakeData();
 
         return recyclerView;
     }
 
     public void onSearchTerm(@NonNull CharSequence term) {
-
+        getPresenter().search(term.toString());
     }
 
     @NonNull
@@ -68,17 +84,8 @@ public class SearchFragment extends Fragment {
         return checkNotNull((ContentView) getActivity());
     }
 
-    // TODO remove
-    private void addFakeData() {
-        List<SearchItemModel> searchItems = new ArrayList<>();
-        for (int i = 0; i < 100; ++i) {
-            searchItems.add(SearchItemModel.getBuilder()
-                    .withPrimaryTitle(new SpannableString("Title " + i))
-                    .withSecondaryTitle(new SpannableString(""))
-                    .withPrimarySubtitle(new SpannableString("Primary subtitle " + i))
-                    .withSecondarySubtitle(new SpannableString("Secondary subtitle " + i))
-                    .build());
-        }
-        mAdapter.setData(searchItems);
+    @NonNull
+    private SearchContract.Presenter getPresenter() {
+        return checkNotNull(mPresenter, "Presenter is not injected.");
     }
 }

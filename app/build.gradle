@@ -21,6 +21,10 @@ android {
         }
     }
 
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
+    }
+
     dataBinding {
         enabled = true
     }
@@ -57,15 +61,15 @@ dependencies {
     testCompile deps.test.hamcrest
     testAnnotationProcessor deps.tools.dagger.compiler
 
-    compile deps.tools.retrofit.lib
-    compile deps.tools.retrofit.converter_gson
-    compile deps.tools.retrofit.adapter_rxjava
-
-    compile deps.tools.rx.android
     compile deps.tools.rx.java
+    compile deps.tools.rx.android
     compile deps.tools.rx.binding
     compile deps.tools.rx.binding_appcompat
     compile deps.tools.rx.binding_support
+
+    compile deps.tools.retrofit.lib
+    compile deps.tools.retrofit.adapter_rxjava
+    compile deps.tools.retrofit.converter_gson
 
     compile deps.tools.google.maps
 
