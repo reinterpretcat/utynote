@@ -2,10 +2,11 @@ ext {
     deps = [:]
 
     deps.versions = [
-            dagger   : '2.9',
-            espresso : '2.2.2',
-            support  : '25.1.0',
-            retrofit : '2.2.0'
+            dagger    : '2.9',
+            espresso  : '2.2.2',
+            support   : '25.1.0',
+            retrofit  : '2.2.0',
+            rxbinding : '2.0.0'
     ]
 
     deps.tools = [
@@ -21,7 +22,10 @@ ext {
             ],
             rx : [
                     java     : 'io.reactivex:rxjava:1.1.6',
-                    android  : 'io.reactivex:rxandroid:1.2.1'
+                    android  : 'io.reactivex:rxandroid:1.2.1',
+                    binding  : "com.jakewharton.rxbinding2:rxbinding:${deps.versions.rxbinding}",
+                    binding_appcompat : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${deps.versions.rxbinding}",
+                    binding_support   : "com.jakewharton.rxbinding2:rxbinding-support-v4:${deps.versions.rxbinding}"
             ],
             support : [
                     appcompat         : "com.android.support:appcompat-v7:${deps.versions.support}",

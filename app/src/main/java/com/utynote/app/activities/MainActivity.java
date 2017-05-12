@@ -7,13 +7,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding2.view.MenuItemActionViewCollapseEvent;
+import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent;
+import com.jakewharton.rxbinding2.view.RxMenuItem;
 import com.utynote.R;
 import com.utynote.components.ContentView;
 import com.utynote.components.map.MapFragment;
@@ -22,6 +26,8 @@ import com.utynote.components.search.SearchFragment;
 import com.utynote.databinding.MainContentBinding;
 import com.utynote.utils.Function;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
@@ -86,19 +92,18 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         getMenuInflater().inflate(R.menu.main_appbar, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                replaceFragment(SearchFragment.TAG, SearchFragment::new);
-                return true;
-            }
 
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                replaceFragment(NearbyFragment.TAG, NearbyFragment::new);
-                return true;
-            }
-        });
+        RxMenuItem.actionViewEvents(searchMenuItem)
+                .ofType(MenuItemActionViewExpandEvent.class)
+                .subscribe(e -> replaceFragment(SearchFragment.TAG, SearchFragment::new));
+
+        RxMenuItem.actionViewEvents(searchMenuItem)
+                .ofType(MenuItemActionViewCollapseEvent.class)
+                .subscribe(e -> replaceFragment(NearbyFragment.TAG, NearbyFragment::new));
+
+        RxSearchView.queryTextChanges((SearchView) searchMenuItem.getActionView())
+                .debounce(1, TimeUnit.SECONDS)
+                .subscribe(getFragment(SearchFragment.TAG, SearchFragment.class)::onSearchTerm);
 
         return true;
     }
@@ -113,6 +118,11 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     @Override
     public SlidingUpPanelLayout getSlidingPanel() {
         return checkNotNull(mContentBinding.slidingLayout);
+    }
+
+    @NonNull
+    private <T extends Fragment> T getFragment(@NonNull String tag, Class<T> type) {
+        return type.cast(checkNotNull(getSupportFragmentManager().findFragmentByTag(tag)));
     }
 
     private void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {

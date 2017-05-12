@@ -62,6 +62,10 @@ public class SearchFragment extends Fragment {
         return recyclerView;
     }
 
+    public void onSearchTerm(@NonNull CharSequence term) {
+
+    }
+
     @NonNull
     private ContentView getContentView() {
         return checkNotNull((ContentView) getActivity());

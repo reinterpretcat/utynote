@@ -63,6 +63,9 @@ dependencies {
 
     compile deps.tools.rx.android
     compile deps.tools.rx.java
+    compile deps.tools.rx.binding
+    compile deps.tools.rx.binding_appcompat
+    compile deps.tools.rx.binding_support
 
     compile deps.tools.google.maps
 
