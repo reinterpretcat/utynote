@@ -45,13 +45,13 @@ dependencies {
     androidTestCompile(deps.androidTest.espresso.core, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile deps.app.support.appcompat
-    compile deps.app.support.cardview
-    compile deps.app.support.design
-    compile deps.app.support.constraint_layout
-    compile deps.app.support.v4
-    compile deps.app.support.vector_drawable
-    compile deps.app.google.maps
+    compile deps.tools.support.appcompat
+    compile deps.tools.support.cardview
+    compile deps.tools.support.design
+    compile deps.tools.support.constraint_layout
+    compile deps.tools.support.v4
+    compile deps.tools.support.vector_drawable
+    compile deps.tools.google.maps
 
     testCompile deps.test.junit.lib
     testCompile deps.test.hamcrest
@@ -61,10 +61,10 @@ dependencies {
     compile deps.tools.retrofit.converter_gson
     compile deps.tools.retrofit.adapter_rxjava
 
-    compile deps.app.rxandroid
-    compile deps.tools.rxjava
+    compile deps.tools.rx.android
+    compile deps.tools.rx.java
 
-    compile deps.app.google.maps
+    compile deps.tools.google.maps
 
     compile deps.tools.dagger.lib
     annotationProcessor deps.tools.dagger.compiler

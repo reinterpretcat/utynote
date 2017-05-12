@@ -19,10 +19,10 @@ ext {
                     converter_gson :  "com.squareup.retrofit2:converter-gson:${deps.versions.retrofit}",
                     adapter_rxjava :  "com.squareup.retrofit2:adapter-rxjava:${deps.versions.retrofit}"
             ],
-            rxjava    : 'io.reactivex:rxjava:1.1.6'
-    ]
-
-    deps.app = [
+            rx : [
+                    java     : 'io.reactivex:rxjava:1.1.6',
+                    android  : 'io.reactivex:rxandroid:1.2.1'
+            ],
             support : [
                     appcompat         : "com.android.support:appcompat-v7:${deps.versions.support}",
                     cardview          : "com.android.support:cardview-v7:${deps.versions.support}",
@@ -35,8 +35,7 @@ ext {
             google : [
                     maps: 'com.google.android.gms:play-services-maps:10.0.1'
             ],
-            gson      : 'com.google.code.gson:gson:2.7',
-            rxandroid : 'io.reactivex:rxandroid:1.2.1'
+            gson      : 'com.google.code.gson:gson:2.7'
     ]
 
     deps.androidTest = [
