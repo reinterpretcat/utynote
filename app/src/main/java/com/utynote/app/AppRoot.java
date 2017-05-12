@@ -11,6 +11,8 @@ import com.utynote.app.dependencies.search.DaggerSearchComponent;
 import com.utynote.app.dependencies.search.SearchComponent;
 import com.utynote.app.dependencies.search.SearchModule;
 
+import static com.utynote.utils.Preconditions.checkNotNull;
+
 public class AppRoot extends Application {
     private SearchComponent mSearchComponent;
 
@@ -30,7 +32,8 @@ public class AppRoot extends Application {
                 .build();
     }
 
+    @NonNull
     public SearchComponent getSearchComponent() {
-        return mSearchComponent;
+        return checkNotNull(mSearchComponent);
     }
 }

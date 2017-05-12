@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.utynote.R;
-import com.utynote.app.AppRoot;
 import com.utynote.components.ContentView;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
@@ -34,8 +33,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        ((AppRoot) getActivity().getApplication()).getSearchComponent().inject(this);
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         Toolbar toolbar = getContentView().getToolbar();

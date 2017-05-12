@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +18,13 @@ import com.jakewharton.rxbinding2.view.MenuItemActionViewCollapseEvent;
 import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent;
 import com.jakewharton.rxbinding2.view.RxMenuItem;
 import com.utynote.R;
+import com.utynote.app.AppRoot;
 import com.utynote.components.ContentView;
 import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.components.search.SearchFragment;
 import com.utynote.databinding.MainContentBinding;
-import com.utynote.utils.Function;
+import com.utynote.utils.FragmentHelper;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import java.util.concurrent.TimeUnit;
@@ -34,11 +34,14 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 public class MainActivity extends AppCompatActivity implements ContentView,
         NavigationView.OnNavigationItemSelectedListener {
 
+    private FragmentHelper mFragmentHelper;
     private MainContentBinding mContentBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFragmentHelper = new FragmentHelper(getSupportFragmentManager());
 
         mContentBinding = DataBindingUtil.setContentView(this, R.layout.main_content);
         setSupportActionBar(mContentBinding.toolbar);
@@ -52,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_content, getFragment(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
-                .add(R.id.panel_content, getFragment(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
+                .add(R.id.main_content, mFragmentHelper.getFragment(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
+                .add(R.id.panel_content, mFragmentHelper.getFragment(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
                 .commit();
     }
 
@@ -95,15 +98,19 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         RxMenuItem.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewExpandEvent.class)
-                .subscribe(e -> replaceFragment(SearchFragment.TAG, SearchFragment::new));
+                .subscribe(e -> mFragmentHelper.replaceFragment(SearchFragment.TAG, () -> {
+                    SearchFragment fragment = new SearchFragment();
+                    ((AppRoot) getApplication()).getSearchComponent().inject(fragment);
+                    return fragment;
+                }));
 
         RxMenuItem.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewCollapseEvent.class)
-                .subscribe(e -> replaceFragment(NearbyFragment.TAG, NearbyFragment::new));
+                .subscribe(e -> mFragmentHelper.replaceFragment(NearbyFragment.TAG, NearbyFragment::new));
 
         RxSearchView.queryTextChanges((SearchView) searchMenuItem.getActionView())
                 .debounce(1, TimeUnit.SECONDS)
-                .subscribe(getFragment(SearchFragment.TAG, SearchFragment.class)::onSearchTerm);
+                .subscribe(mFragmentHelper.findFragment(SearchFragment.TAG, SearchFragment.class)::onSearchTerm);
 
         return true;
     }
@@ -120,20 +127,4 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         return checkNotNull(mContentBinding.slidingLayout);
     }
 
-    @NonNull
-    private <T extends Fragment> T getFragment(@NonNull String tag, Class<T> type) {
-        return type.cast(checkNotNull(getSupportFragmentManager().findFragmentByTag(tag)));
-    }
-
-    private void replaceFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.panel_content, getFragment(tag, factory), tag)
-                .commit();
-    }
-
-    private Fragment getFragment(@NonNull String tag, Function.ZeroArgs<Fragment> factory) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        return fragment == null ? factory.call() : fragment;
-    }
 }
