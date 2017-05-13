@@ -26,7 +26,7 @@ import com.utynote.components.map.MapFragment;
 import com.utynote.components.nearby.NearbyFragment;
 import com.utynote.components.search.SearchFragment;
 import com.utynote.databinding.MainContentBinding;
-import com.utynote.utils.FragmentHelper;
+import com.utynote.utils.Fragments;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import java.util.concurrent.TimeUnit;
@@ -36,14 +36,14 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 public class MainActivity extends AppCompatActivity implements ContentView,
         NavigationView.OnNavigationItemSelectedListener {
 
-    private FragmentHelper mFragmentHelper;
+    private Fragments mFragments;
     private MainContentBinding mContentBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFragmentHelper = new FragmentHelper(getSupportFragmentManager());
+        mFragments = new Fragments(getSupportFragmentManager());
 
         mContentBinding = DataBindingUtil.setContentView(this, R.layout.main_content);
         setSupportActionBar(mContentBinding.toolbar);
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_content, mFragmentHelper.get(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
-                .add(R.id.panel_content, mFragmentHelper.get(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
+                .add(R.id.main_content, mFragments.get(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
+                .add(R.id.panel_content, mFragments.get(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
                 .commit();
     }
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewExpandEvent.class)
-                .subscribe(e -> mFragmentHelper.replace(SearchFragment.TAG, () -> {
+                .subscribe(e -> mFragments.replace(SearchFragment.TAG, () -> {
                     SearchFragment fragment = new SearchFragment();
                     ((AppRoot) getApplication()).getSearchComponent().inject(fragment);
                     return fragment;
@@ -108,12 +108,12 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem)
                 .ofType(MenuItemActionViewCollapseEvent.class)
-                .subscribe(e -> mFragmentHelper.replace(NearbyFragment.TAG, NearbyFragment::new));
+                .subscribe(e -> mFragments.replace(NearbyFragment.TAG, NearbyFragment::new));
 
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
                 .filter(e -> !TextUtils.isEmpty(e.queryText()))
                 .debounce(1, TimeUnit.SECONDS)
-                .subscribe(e -> mFragmentHelper.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
+                .subscribe(e -> mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
 
         return true;
     }

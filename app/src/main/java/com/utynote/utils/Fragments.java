@@ -10,11 +10,11 @@ import rx.functions.Func0;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
-public final class FragmentHelper {
+public final class Fragments {
 
     @NonNull private final FragmentManager mFragmentManager;
 
-    public FragmentHelper(@NonNull FragmentManager fragmentManager) {
+    public Fragments(@NonNull FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
     }
 
