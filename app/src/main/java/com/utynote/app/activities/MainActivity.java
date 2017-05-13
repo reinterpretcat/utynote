@@ -10,8 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,6 +28,8 @@ import com.utynote.utils.Fragments;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
 import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
@@ -98,21 +98,19 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
-        RxMenuItemCompat.actionViewEvents(searchMenuItem)
-                .ofType(MenuItemActionViewExpandEvent.class)
-                .subscribe(e -> mFragments.replace(SearchFragment.TAG, () -> {
-                    SearchFragment fragment = new SearchFragment();
-                    ((AppRoot) getApplication()).getSearchComponent().inject(fragment);
-                    return fragment;
-                }));
-
-        RxMenuItemCompat.actionViewEvents(searchMenuItem)
-                .ofType(MenuItemActionViewCollapseEvent.class)
-                .subscribe(e -> mFragments.replace(NearbyFragment.TAG, NearbyFragment::new));
+        RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe(e -> {
+                    Observable.just(e)
+                            .ofType(MenuItemActionViewExpandEvent.class)
+                            .subscribe(expand -> mFragments.replace(SearchFragment.TAG, this::createSearchFragment));
+                    Observable.just(e)
+                            .ofType(MenuItemActionViewCollapseEvent.class)
+                            .subscribe(collapse -> mFragments.replace(NearbyFragment.TAG, NearbyFragment::new));
+                });
 
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
-                .filter(e -> !TextUtils.isEmpty(e.queryText()))
+                .filter(e -> e.queryText().length() > 2)
                 .debounce(1, TimeUnit.SECONDS)
+                .filter(e -> mFragments.has(SearchFragment.TAG))
                 .subscribe(e -> mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
 
         return true;
@@ -130,4 +128,9 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         return checkNotNull(mContentBinding.slidingLayout);
     }
 
+    private SearchFragment createSearchFragment() {
+        SearchFragment fragment = new SearchFragment();
+        ((AppRoot) getApplication()).getSearchComponent().inject(fragment);
+        return fragment;
+    }
 }
