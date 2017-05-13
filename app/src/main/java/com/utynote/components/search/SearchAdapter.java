@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.utynote.databinding.SearchItemViewBinding;
+import com.utynote.utils.Sequences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,10 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
         return mData.size();
     }
 
-    public void setData(@Nullable List<SearchItemModel> data) {
+    public void setData(@Nullable Iterable<SearchItemModel> data) {
         mData.clear();
         if (data != null) {
-            mData.addAll(data);
+            mData.addAll(Sequences.map(data));
         }
         notifyDataSetChanged();
     }

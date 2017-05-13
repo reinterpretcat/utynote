@@ -16,8 +16,6 @@ import com.utynote.R;
 import com.utynote.components.ContentView;
 import com.utynote.widgets.panel.SlidingUpPanelLayout;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
@@ -31,7 +29,7 @@ public class SearchFragment extends Fragment {
 
     private final SearchContract.View m_searchView = new SearchContract.View() {
         @Override
-        public void showResults(@NonNull List<SearchItemModel> results) {
+        public void showResults(@NonNull Iterable<SearchItemModel> results) {
             mAdapter.setData(results);
         }
 

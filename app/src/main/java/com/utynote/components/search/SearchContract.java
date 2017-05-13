@@ -2,12 +2,10 @@ package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 final class SearchContract {
 
     public interface View {
-        void showResults(@NonNull List<SearchItemModel> results);
+        void showResults(@NonNull Iterable<SearchItemModel> results);
         void showError(@NonNull String description);
     }
 

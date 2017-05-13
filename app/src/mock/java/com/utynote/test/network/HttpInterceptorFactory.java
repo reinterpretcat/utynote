@@ -7,7 +7,7 @@ import com.utynote.utils.Sequences;
 
 import java.util.ArrayList;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 
 public final class HttpInterceptorFactory {
@@ -17,11 +17,10 @@ public final class HttpInterceptorFactory {
         String[] headers = Observable.just(ResourceProvider.readString(assetPath + ".headers"))
                 .map(s -> s.split("\n"))
                 .scan(new ArrayList<String>(), Sequences::merge)
-                .flatMap(Observable::from)
+                .flatMap(Observable::fromIterable)
                 .map(s -> s.split(":", 1))
                 .reduce(new ArrayList<String>(), Sequences::merge)
-                .toBlocking()
-                .single()
+                .blockingGet()
                 .toArray(new String[0]);
 
         byte[] body = ResourceProvider.readBytes(assetPath + ".body");

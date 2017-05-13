@@ -1,9 +1,10 @@
 package com.utynote.components.search.data.geojson;
 
 
-import com.utynote.components.search.data.SearchRepository;
+import com.utynote.components.search.data.SearchProcessor;
 import com.utynote.components.search.data.SearchResult;
 import com.utynote.entities.GeoCoordinate;
+import com.utynote.entities.Place;
 import com.utynote.test.annotations.HttpResponse;
 import com.utynote.test.core.AnnotationHandler;
 import com.utynote.test.dependencies.SearchComponentFactory;
@@ -12,19 +13,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import rx.observers.TestSubscriber;
+import io.reactivex.subscribers.TestSubscriber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsCollectionContaining.hasItem;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
 
-public class SearchRepositoryTest {
+public class SearchProcessorTest {
 
     @Rule public final AnnotationHandler mRule = new AnnotationHandler();
-    @Inject public SearchRepository mRepository;
+    @Inject public SearchProcessor mProcessor;
 
     @Before
     public void setup() {
@@ -37,13 +37,13 @@ public class SearchRepositoryTest {
     @Test
     public void search_hasExpectedResult() {
         TestSubscriber<SearchResult> subscriber = new TestSubscriber<>();
+        mProcessor.subscribe(subscriber);
 
-        mRepository
-                .search("Berlin")
-                .subscribe(subscriber);
+        mProcessor.onNext("Berlin");
 
         subscriber.assertNoErrors();
-        assertThat(subscriber.getOnNextEvents(), hasItem(SearchResult.getBuilder()
+        assertThat(subscriber.valueCount(), equalTo(1));
+        assertThat(subscriber.values().get(0).places, hasItem(Place.getBuilder()
                 .withId("101748799")
                 .withName("Berlin")
                 .withCountry("Germany")

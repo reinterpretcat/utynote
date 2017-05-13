@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -99,17 +100,26 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe(e -> {
                 Observable.just(e)
                         .ofType(MenuItemActionViewExpandEvent.class)
-                        .subscribe(expand -> mFragments.replaceInPanel(SearchFragment.TAG, this::createSearchFragment));
+                        .subscribe(expand -> {
+                            Log.d("###", "MenuItemActionViewExpandEvent");
+                            mFragments.replaceInPanel(SearchFragment.TAG, this::createSearchFragment);
+                        });
                 Observable.just(e)
                         .ofType(MenuItemActionViewCollapseEvent.class)
-                        .subscribe(collapse -> mFragments.replaceInPanel(NearbyFragment.TAG, NearbyFragment::new));
+                        .subscribe(collapse ->  {
+                            Log.d("###", "MenuItemActionViewCollapseEvent");
+                            mFragments.replaceInPanel(NearbyFragment.TAG, NearbyFragment::new);
+                        });
             });
 
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
                 .filter(e -> e.queryText().length() > 2)
                 .debounce(1, TimeUnit.SECONDS)
                 .filter(e -> mFragments.isAttached(SearchFragment.TAG))
-                .subscribe(e -> mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
+                .subscribe(e -> {
+                    Log.d("###", "queryTextChangeEvents");
+                    mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText());
+                });
 
         return true;
     }

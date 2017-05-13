@@ -1,6 +1,6 @@
 package com.utynote.entities;
 
-public class GeoCoordinate {
+public final class GeoCoordinate {
 
     public final double latitude;
     public final double longitude;

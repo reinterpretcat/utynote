@@ -4,20 +4,55 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.SpannableString;
 
-import com.utynote.components.search.data.SearchRepository;
+import com.utynote.components.search.data.SearchProcessor;
+import com.utynote.components.search.data.SearchResult;
 import com.utynote.utils.Sequences;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
+
+import io.reactivex.Observable;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
-    @NonNull private final SearchRepository mRepository;
+    @NonNull private final SearchProcessor mProcessor;
     @Nullable private SearchContract.View mView;
 
-    public SearchPresenter(@NonNull SearchRepository mRepository) {
-        this.mRepository = mRepository;
+    @NonNull private final Subscriber<SearchResult> mSubscriber = new Subscriber<SearchResult>() {
+        @Override
+        public void onSubscribe(Subscription s) {
+        }
+
+        @Override
+        public void onNext(SearchResult searchResult) {
+            Iterable<SearchItemModel> results = Observable.fromIterable(searchResult.places)
+                    .map(r -> SearchItemModel.getBuilder()
+                    .withPrimaryTitle(SpannableString.valueOf(r.name))
+                    .withPrimarySubtitle(SpannableString.valueOf(r.country))
+                    .withSecondarySubtitle(SpannableString.valueOf(r.coordinate.toString()))
+                    .build())
+                    .toList()
+                    .blockingGet();
+            getView().showResults(results);
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            getView().showError(t.getMessage());
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    };
+
+    public SearchPresenter(@NonNull SearchProcessor processor) {
+        mProcessor = processor;
+        mProcessor.subscribe(mSubscriber);
     }
 
     @Override
@@ -32,7 +67,9 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void search(@NonNull String term) {
-        mRepository
+        mProcessor.onNext(term);
+
+        /*mRepository
                 .search(term)
                 .map(r -> SearchItemModel.getBuilder()
                             .withPrimaryTitle(SpannableString.valueOf(r.name))
@@ -40,7 +77,7 @@ public class SearchPresenter implements SearchContract.Presenter {
                             .withSecondarySubtitle(SpannableString.valueOf(r.coordinate.toString()))
                             .build())
                 .reduce(new ArrayList<SearchItemModel>(), Sequences::merge)
-                .subscribe(getView()::showResults, ex -> getView().showError(formatError(ex)));
+                .subscribe(getView()::showResults, ex -> getView().showError(formatError(ex)));*/
     }
 
     @NonNull
