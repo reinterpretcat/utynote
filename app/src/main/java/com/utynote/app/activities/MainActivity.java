@@ -55,11 +55,9 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         mContentBinding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.main_content, mFragments.get(MapFragment.TAG, MapFragment::new),  MapFragment.TAG)
-                .add(R.id.panel_content, mFragments.get(NearbyFragment.TAG, NearbyFragment::new),  NearbyFragment.TAG)
-                .commit();
+        mFragments
+                .addToContent(MapFragment.TAG, MapFragment::new)
+                .addToPanel(NearbyFragment.TAG, NearbyFragment::new);
     }
 
     @Override
@@ -99,13 +97,13 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe(e -> {
-                    Observable.just(e)
-                            .ofType(MenuItemActionViewExpandEvent.class)
-                            .subscribe(expand -> mFragments.replace(SearchFragment.TAG, this::createSearchFragment));
-                    Observable.just(e)
-                            .ofType(MenuItemActionViewCollapseEvent.class)
-                            .subscribe(collapse -> mFragments.replace(NearbyFragment.TAG, NearbyFragment::new));
-                });
+                Observable.just(e)
+                        .ofType(MenuItemActionViewExpandEvent.class)
+                        .subscribe(expand -> mFragments.replaceInPanel(SearchFragment.TAG, this::createSearchFragment));
+                Observable.just(e)
+                        .ofType(MenuItemActionViewCollapseEvent.class)
+                        .subscribe(collapse -> mFragments.replaceInPanel(NearbyFragment.TAG, NearbyFragment::new));
+            });
 
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
                 .filter(e -> e.queryText().length() > 2)

@@ -1,5 +1,6 @@
 package com.utynote.utils;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,11 +24,23 @@ public final class Fragments {
         return type.cast(checkNotNull(mFragmentManager.findFragmentByTag(tag)));
     }
 
-    public void replace(@NonNull String tag, Func0<Fragment> factory) {
+    public Fragments addToContent(@NonNull String tag, Func0<Fragment> factory) {
+        add(tag, R.id.main_content, factory);
+        return this;
+    }
+
+    public Fragments addToPanel(@NonNull String tag, Func0<Fragment> factory) {
+        add(tag, R.id.panel_content, factory);
+        return this;
+    }
+
+    public Fragments replaceInPanel(@NonNull String tag, Func0<Fragment> factory) {
         mFragmentManager
                 .beginTransaction()
                 .replace(R.id.panel_content, get(tag, factory), tag)
                 .commit();
+
+        return this;
     }
 
     public boolean has(@NonNull String tag) {
@@ -38,5 +51,14 @@ public final class Fragments {
     public Fragment get(@NonNull String tag, Func0<Fragment> factory) {
         Fragment fragment = mFragmentManager.findFragmentByTag(tag);
         return fragment == null ? factory.call() : fragment;
+    }
+
+    private Fragments add(@NonNull String tag, @IdRes int containerId, Func0<Fragment> factory) {
+        mFragmentManager
+                .beginTransaction()
+                .add(containerId, get(tag, factory), tag)
+                .commit();
+
+        return this;
     }
 }
