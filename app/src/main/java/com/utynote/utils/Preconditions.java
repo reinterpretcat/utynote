@@ -23,7 +23,7 @@ import android.support.annotation.Nullable;
  * <p>
  * <p>If the precondition is not met, the {@code Preconditions} method throws an unchecked exception
  * of a specified type, which helps the method in which the exception was thrown communicate that
- * its caller has made a mistake. This allows constructs such as
+ * its caller isAttached made a mistake. This allows constructs such as
  * <p>
  * <pre>{@code
  * public static double sqrt(double value) {

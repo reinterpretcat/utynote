@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
                 .filter(e -> e.queryText().length() > 2)
                 .debounce(1, TimeUnit.SECONDS)
-                .filter(e -> mFragments.has(SearchFragment.TAG))
+                .filter(e -> mFragments.isAttached(SearchFragment.TAG))
                 .subscribe(e -> mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText()));
 
         return true;

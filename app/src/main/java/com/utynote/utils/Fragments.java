@@ -43,8 +43,9 @@ public final class Fragments {
         return this;
     }
 
-    public boolean has(@NonNull String tag) {
-        return mFragmentManager.findFragmentByTag(tag) != null;
+    public boolean isAttached(@NonNull String tag) {
+        Fragment fragment = mFragmentManager.findFragmentByTag(tag);
+        return fragment != null && !fragment.isDetached();
     }
 
     @NonNull
