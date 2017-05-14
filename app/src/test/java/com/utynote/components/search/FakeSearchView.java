@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FakeSearchView implements SearchContract.View {
+final class FakeSearchView implements SearchContract.View {
 
     @NonNull public final List<Iterable<SearchItemModel>> results = new ArrayList<>();
     @NonNull public final List<String> errors = new ArrayList<>();

@@ -55,6 +55,10 @@ public class JsonSearchProcessor extends SearchProcessor {
         if (mSubscription != null) {
             mSubscription.unsubscribe();
         }
+        if (mSubscribers.isEmpty()) {
+            return;
+        }
+
         mSubscription = mService
                 .search(term)
                 .subscribe(data -> notifySubscribers(term, data));

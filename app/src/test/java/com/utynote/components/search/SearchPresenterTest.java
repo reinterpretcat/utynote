@@ -28,12 +28,24 @@ public class SearchPresenterTest {
 
     @HttpResponse(path = "search/geojson/berlin")
     @Test
-    public void search_hasExpectedResult() {
+    public void whenAttached_search_hasExpectedResult() {
         mPresenter.attach(mView);
 
         mPresenter.search("Berlin");
 
+        assertThat(mView.errors, emptyIterable());
         assertThat(mView.results, hasSize(1));
+    }
+
+    @HttpResponse(path = "search/geojson/berlin")
+    @Test
+    public void whenDetached_search_hasNoResults() {
+        mPresenter.attach(mView);
+        mPresenter.detach();
+
+        mPresenter.search("Berlin");
+
+        assertThat(mView.results, emptyIterable());
         assertThat(mView.errors, emptyIterable());
     }
 }
