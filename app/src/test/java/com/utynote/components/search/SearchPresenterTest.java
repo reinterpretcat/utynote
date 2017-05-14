@@ -41,7 +41,7 @@ public class SearchPresenterTest {
 
         assertThat(view.errors, emptyIterable());
         assertThat(view.results, hasSize(1));
-        assertThat(view.results.get(0), hasItem(new SearchItemMatcher(SearchItemModel.getBuilder()
+        assertThat(view.results.get(0), hasItem(match(SearchItemModel.getBuilder()
                 .withPrimaryTitle("Berlin")
                 .withSecondaryTitle("")
                 .withPrimarySubtitle("Germany")
@@ -61,24 +61,21 @@ public class SearchPresenterTest {
         assertThat(view.errors, emptyIterable());
     }
 
-    private final class SearchItemMatcher extends TypeSafeMatcher<SearchItemModel> {
-        @NonNull private final SearchItemModel mModel;
+    @NonNull
+    private TypeSafeMatcher<SearchItemModel> match(@NonNull final SearchItemModel model) {
+        return new TypeSafeMatcher<SearchItemModel>() {
+            @Override
+            protected boolean matchesSafely(SearchItemModel item) {
+                return Utils.equals(model.primaryTitle, item.primaryTitle) &&
+                        Utils.equals(model.secondaryTitle, item.secondaryTitle) &&
+                        Utils.equals(model.primarySubtitle, item.primarySubtitle) &&
+                        Utils.equals(model.secondarySubtitle, item.secondarySubtitle);
+            }
 
-        SearchItemMatcher(@NonNull SearchItemModel model) {
-            mModel = model;
-        }
-
-        @Override
-        protected boolean matchesSafely(SearchItemModel item) {
-            return Utils.equals(mModel.primaryTitle, item.primaryTitle) &&
-                   Utils.equals(mModel.secondaryTitle, item.secondaryTitle) &&
-                   Utils.equals(mModel.primarySubtitle, item.primarySubtitle) &&
-                   Utils.equals(mModel.secondarySubtitle, item.secondarySubtitle);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("Search item with title: " + mModel.primaryTitle);
-        }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Search item with title: " + model.primaryTitle);
+            }
+        };
     }
 }
