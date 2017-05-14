@@ -14,7 +14,7 @@ public class Sequences {
     }
 
     /** Maps iterable to collection. */
-    public static <E> Collection<E> map(Iterable<E> iterable) {
+    public static <E> Collection<E> asCollection(Iterable<E> iterable) {
         Collection<E> list = new ArrayList<>();
         for (E item : iterable) {
             list.add(item);

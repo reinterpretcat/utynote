@@ -36,7 +36,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     public void setData(@Nullable Iterable<SearchItemModel> data) {
         this.data.clear();
         if (data != null) {
-            this.data.addAll(Sequences.map(data));
+            this.data.addAll(Sequences.asCollection(data));
         }
         notifyDataSetChanged();
     }
