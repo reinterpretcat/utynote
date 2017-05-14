@@ -14,7 +14,7 @@ import com.utynote.app.dependencies.search.SearchModule;
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class AppRoot extends Application {
-    private SearchComponent mSearchComponent;
+    private SearchComponent searchComponent;
 
     @Override
     public void onCreate() {
@@ -24,7 +24,7 @@ public class AppRoot extends Application {
                 .withSearch("https://search.mapzen.com/v1/", "geojson")
                 .build();
 
-        mSearchComponent = DaggerSearchComponent.builder()
+        searchComponent = DaggerSearchComponent.builder()
                 .appModule(new AppModule(this))
                 .netModule(new NetModule())
                 .libModule(new LibModule())
@@ -34,6 +34,6 @@ public class AppRoot extends Application {
 
     @NonNull
     public SearchComponent getSearchComponent() {
-        return checkNotNull(mSearchComponent);
+        return checkNotNull(searchComponent);
     }
 }

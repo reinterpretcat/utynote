@@ -24,13 +24,13 @@ public class SearchFragment extends Fragment {
 
     public static final String TAG = SearchFragment.class.getSimpleName();
 
-    @Nullable @Inject SearchPresenter mPresenter;
-    @NonNull private final SearchAdapter mAdapter = new SearchAdapter();
+    @Nullable @Inject SearchPresenter presenter;
+    @NonNull private final SearchAdapter adapter = new SearchAdapter();
 
-    private final SearchContract.View m_searchView = new SearchContract.View() {
+    private final SearchContract.View searchView = new SearchContract.View() {
         @Override
         public void showResults(@NonNull Iterable<SearchItemModel> results) {
-            mAdapter.setData(results);
+            adapter.setData(results);
         }
 
         @Override
@@ -43,7 +43,7 @@ public class SearchFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        getPresenter().attach(m_searchView);
+        getPresenter().attach(searchView);
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         Toolbar toolbar = getContentView().getToolbar();
@@ -68,7 +68,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.search_container_view, container, false);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(adapter);
 
         return recyclerView;
     }
@@ -84,6 +84,6 @@ public class SearchFragment extends Fragment {
 
     @NonNull
     private SearchContract.Presenter getPresenter() {
-        return checkNotNull(mPresenter, "Presenter is not injected.");
+        return checkNotNull(presenter, "Presenter is not injected.");
     }
 }

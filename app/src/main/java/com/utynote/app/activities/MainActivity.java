@@ -37,34 +37,34 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 public class MainActivity extends AppCompatActivity implements ContentView,
         NavigationView.OnNavigationItemSelectedListener {
 
-    private Fragments mFragments;
-    private MainContentBinding mContentBinding;
+    private Fragments fragments;
+    private MainContentBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFragments = new Fragments(getSupportFragmentManager());
+        fragments = new Fragments(getSupportFragmentManager());
 
-        mContentBinding = DataBindingUtil.setContentView(this, R.layout.main_content);
-        setSupportActionBar(mContentBinding.toolbar);
+        binding = DataBindingUtil.setContentView(this, R.layout.main_content);
+        setSupportActionBar(binding.toolbar);
 
-        mContentBinding.navigationView.setNavigationItemSelectedListener(this);
+        binding.navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mContentBinding.drawerLayout,
-                mContentBinding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mContentBinding.drawerLayout.setDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawerLayout,
+                binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        binding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        mFragments
+        fragments
                 .addToContent(MapFragment.TAG, MapFragment::new)
                 .addToPanel(NearbyFragment.TAG, NearbyFragment::new);
     }
 
     @Override
     public void onBackPressed() {
-        if (mContentBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mContentBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
 
         }
 
-        mContentBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -102,23 +102,23 @@ public class MainActivity extends AppCompatActivity implements ContentView,
                         .ofType(MenuItemActionViewExpandEvent.class)
                         .subscribe(expand -> {
                             Log.d("###", "MenuItemActionViewExpandEvent");
-                            mFragments.replaceInPanel(SearchFragment.TAG, this::createSearchFragment);
+                            fragments.replaceInPanel(SearchFragment.TAG, this::createSearchFragment);
                         });
                 Observable.just(e)
                         .ofType(MenuItemActionViewCollapseEvent.class)
                         .subscribe(collapse ->  {
                             Log.d("###", "MenuItemActionViewCollapseEvent");
-                            mFragments.replaceInPanel(NearbyFragment.TAG, NearbyFragment::new);
+                            fragments.replaceInPanel(NearbyFragment.TAG, NearbyFragment::new);
                         });
             });
 
         RxSearchView.queryTextChangeEvents((SearchView) searchMenuItem.getActionView())
                 .filter(e -> e.queryText().length() > 2)
                 .debounce(1, TimeUnit.SECONDS)
-                .filter(e -> mFragments.isAttached(SearchFragment.TAG))
+                .filter(e -> fragments.isAttached(SearchFragment.TAG))
                 .subscribe(e -> {
                     Log.d("###", "queryTextChangeEvents");
-                    mFragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText());
+                    fragments.find(SearchFragment.TAG, SearchFragment.class).onSearchTerm(e.queryText());
                 });
 
         return true;
@@ -127,13 +127,13 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     @NonNull
     @Override
     public Toolbar getToolbar() {
-        return checkNotNull(mContentBinding.toolbar);
+        return checkNotNull(binding.toolbar);
     }
 
     @NonNull
     @Override
     public SlidingUpPanelLayout getSlidingPanel() {
-        return checkNotNull(mContentBinding.slidingLayout);
+        return checkNotNull(binding.slidingLayout);
     }
 
     private SearchFragment createSearchFragment() {

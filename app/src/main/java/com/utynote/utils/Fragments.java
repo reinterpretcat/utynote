@@ -13,15 +13,15 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 
 public final class Fragments {
 
-    @NonNull private final FragmentManager mFragmentManager;
+    @NonNull private final FragmentManager fragmentManager;
 
     public Fragments(@NonNull FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
     public <T extends Fragment> T find(@NonNull String tag, Class<T> type) {
-        return type.cast(checkNotNull(mFragmentManager.findFragmentByTag(tag)));
+        return type.cast(checkNotNull(fragmentManager.findFragmentByTag(tag)));
     }
 
     public Fragments addToContent(@NonNull String tag, Func0<Fragment> factory) {
@@ -35,7 +35,7 @@ public final class Fragments {
     }
 
     public Fragments replaceInPanel(@NonNull String tag, Func0<Fragment> factory) {
-        mFragmentManager
+        fragmentManager
                 .beginTransaction()
                 .replace(R.id.panel_content, get(tag, factory), tag)
                 .commit();
@@ -44,18 +44,18 @@ public final class Fragments {
     }
 
     public boolean isAttached(@NonNull String tag) {
-        Fragment fragment = mFragmentManager.findFragmentByTag(tag);
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
         return fragment != null && !fragment.isDetached();
     }
 
     @NonNull
     public Fragment get(@NonNull String tag, Func0<Fragment> factory) {
-        Fragment fragment = mFragmentManager.findFragmentByTag(tag);
+        Fragment fragment = fragmentManager.findFragmentByTag(tag);
         return fragment == null ? factory.call() : fragment;
     }
 
     private Fragments add(@NonNull String tag, @IdRes int containerId, Func0<Fragment> factory) {
-        mFragmentManager
+        fragmentManager
                 .beginTransaction()
                 .add(containerId, get(tag, factory), tag)
                 .commit();

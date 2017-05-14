@@ -22,13 +22,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchModule {
 
     @NonNull
-    private final AppConfig.Search mConfig;
+    private final AppConfig.Search config;
 
     public SearchModule(@NonNull AppConfig.Search config) {
         if (!"geojson".equals(config.format)) {
             throw new UnsupportedOperationException();
         }
-        mConfig = config;
+        this.config = config;
     }
 
     @Provides
@@ -37,7 +37,7 @@ public class SearchModule {
         return new Retrofit.Builder()
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .baseUrl(mConfig.server)
+                    .baseUrl(config.server)
                     .client(okHttpClient)
                     .build()
                     .create(SearchService.class);

@@ -20,7 +20,7 @@ import com.utynote.R;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     public static final String TAG = MapFragment.class.getSimpleName();
 
-    private GoogleMap mMap;
+    private GoogleMap map;
 
     @Nullable
     @Override
@@ -28,13 +28,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.map_container_view, container, false);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Searching your location..", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view1 -> Snackbar
+                        .make(view1, "Searching your location..", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null)
+                        .show());
         return view;
     }
 
@@ -52,9 +49,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
         LatLng sydney = new LatLng(52.53174, 13.38771);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
+        map.addMarker(new MarkerOptions().position(sydney).title("Marker"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18));
     }
 }

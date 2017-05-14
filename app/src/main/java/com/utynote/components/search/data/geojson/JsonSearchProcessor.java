@@ -20,19 +20,19 @@ import io.reactivex.Observable;
 
 public class JsonSearchProcessor extends SearchProcessor {
 
-    @Nullable private rx.Subscription mSubscription;
+    @Nullable private rx.Subscription subscription;
 
-    @NonNull private final SearchService mService;
-    @NonNull private final List<Subscriber<? super SearchResult>> mSubscribers;
+    @NonNull private final SearchService service;
+    @NonNull private final List<Subscriber<? super SearchResult>> subscribers;
 
     public JsonSearchProcessor(@NonNull SearchService service) {
-        mService = service;
-        mSubscribers = new ArrayList<>();
+        this.service = service;
+        this.subscribers = new ArrayList<>();
     }
 
     @Override
     public void subscribe(Subscriber<? super SearchResult> subscriber) {
-        mSubscribers.add(subscriber);
+        subscribers.add(subscriber);
         subscriber.onSubscribe(new Subscription() {
             @Override
             public void request(long n) {
@@ -40,7 +40,7 @@ public class JsonSearchProcessor extends SearchProcessor {
 
             @Override
             public void cancel() {
-                mSubscribers.remove(subscriber);
+                subscribers.remove(subscriber);
             }
         });
     }
@@ -52,14 +52,14 @@ public class JsonSearchProcessor extends SearchProcessor {
 
     @Override
     public void onNext(String term) {
-        if (mSubscription != null) {
-            mSubscription.unsubscribe();
+        if (subscription != null) {
+            subscription.unsubscribe();
         }
-        if (mSubscribers.isEmpty()) {
+        if (subscribers.isEmpty()) {
             return;
         }
 
-        mSubscription = mService
+        subscription = service
                 .search(term)
                 .subscribe(data -> notifySubscribers(term, data));
     }
@@ -84,6 +84,6 @@ public class JsonSearchProcessor extends SearchProcessor {
             .toList()
             .blockingGet();
 
-        mSubscribers.forEach(s -> s.onNext(new SearchResult(term, places)));
+        subscribers.forEach(s -> s.onNext(new SearchResult(term, places)));
     }
 }

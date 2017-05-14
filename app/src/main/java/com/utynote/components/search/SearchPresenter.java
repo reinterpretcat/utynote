@@ -15,34 +15,34 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
-    @Nullable private SearchContract.View mView;
-    @Nullable private Subscription mSubscription;
-    @NonNull private final SearchProcessor mProcessor;
+    @Nullable private SearchContract.View view;
+    @Nullable private Subscription subscription;
+    @NonNull private final SearchProcessor processor;
 
     public SearchPresenter(@NonNull SearchProcessor processor) {
-        mProcessor = processor;
+        this.processor = processor;
     }
 
     @Override
     public void attach(@NonNull SearchContract.View view) {
-        mView = view;
-        mProcessor.subscribe(createSubscriber());
+        this.view = view;
+        processor.subscribe(createSubscriber());
     }
 
     @Override
     public void detach() {
-        checkNotNull(mSubscription).cancel();
-        mView = null;
+        checkNotNull(subscription).cancel();
+        view = null;
     }
 
     @Override
     public void search(@NonNull String term) {
-        mProcessor.onNext(term);
+        processor.onNext(term);
     }
 
     @NonNull
     private SearchContract.View getView() {
-        return checkNotNull(mView);
+        return checkNotNull(view);
     }
 
     @NonNull
@@ -50,7 +50,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         return new Subscriber<SearchResult>() {
             @Override
             public void onSubscribe(Subscription s) {
-                mSubscription = s;
+                subscription = s;
                 s.request(Long.MAX_VALUE);
             }
 

@@ -21,27 +21,27 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 
 public class SearchPresenterTest {
-    @Rule public final AnnotationHandler mRule = new AnnotationHandler();
-    @Inject public SearchPresenter mPresenter;
+    @Rule public final AnnotationHandler rule = new AnnotationHandler();
+    @Inject public SearchPresenter presenter;
 
-    private FakeSearchView mView;
+    private FakeSearchView view;
 
     @Before
     public void setup() {
         SearchComponentFactory.create().inject(this);
-        mView = new FakeSearchView();
+        view = new FakeSearchView();
     }
 
     @HttpResponse(path = "search/geojson/berlin")
     @Test
     public void whenAttached_search_hasExpectedResult() {
-        mPresenter.attach(mView);
+        presenter.attach(view);
 
-        mPresenter.search("Berlin");
+        presenter.search("Berlin");
 
-        assertThat(mView.errors, emptyIterable());
-        assertThat(mView.results, hasSize(1));
-        assertThat(mView.results.get(0), hasItem(new SearchItemMatcher(SearchItemModel.getBuilder()
+        assertThat(view.errors, emptyIterable());
+        assertThat(view.results, hasSize(1));
+        assertThat(view.results.get(0), hasItem(new SearchItemMatcher(SearchItemModel.getBuilder()
                 .withPrimaryTitle("Berlin")
                 .withSecondaryTitle("")
                 .withPrimarySubtitle("Germany")
@@ -52,13 +52,13 @@ public class SearchPresenterTest {
     @HttpResponse(path = "search/geojson/berlin")
     @Test
     public void whenDetached_search_hasNoResults() {
-        mPresenter.attach(mView);
-        mPresenter.detach();
+        presenter.attach(view);
+        presenter.detach();
 
-        mPresenter.search("Berlin");
+        presenter.search("Berlin");
 
-        assertThat(mView.results, emptyIterable());
-        assertThat(mView.errors, emptyIterable());
+        assertThat(view.results, emptyIterable());
+        assertThat(view.errors, emptyIterable());
     }
 
     private final class SearchItemMatcher extends TypeSafeMatcher<SearchItemModel> {

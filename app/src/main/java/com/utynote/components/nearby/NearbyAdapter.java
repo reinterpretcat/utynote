@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -19,35 +18,35 @@ import com.utynote.components.nearby.live.LiveFragment;
 import com.utynote.components.nearby.places.PlacesFragment;
 
 class NearbyAdapter extends FragmentPagerAdapter {
-    @NonNull private final Context mContext;
+    @NonNull private final Context context;
 
     private enum PageTypes {
         PLACES(R.drawable.ic_nearby_places, PlacesFragment.class),
         DEPARTURES(R.drawable.ic_nearby_departures, DeparturesFragment.class),
         LIVE(R.drawable.ic_nearby_live, LiveFragment.class);
 
-        @DrawableRes private final int mTitleDrawableId;
-        @NonNull private final Class mFragmentType;
+        @DrawableRes private final int titleDrawableId;
+        @NonNull private final Class fragmentType;
 
         PageTypes(@DrawableRes int titleDrawableId, @NonNull Class fragmentType) {
-            mTitleDrawableId = titleDrawableId;
-            mFragmentType = fragmentType;
+            this.titleDrawableId = titleDrawableId;
+            this.fragmentType = fragmentType;
         }
 
         @DrawableRes
         public int getTitleDrawableId() {
-            return mTitleDrawableId;
+            return titleDrawableId;
         }
 
         @NonNull
         public Class getFragmentType() {
-            return mFragmentType;
+            return fragmentType;
         }
     }
 
     public NearbyAdapter(FragmentManager fragmentManager, @NonNull Context context) {
         super(fragmentManager);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
@@ -64,7 +63,7 @@ class NearbyAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         PageTypes pageType = PageTypes.values()[position];
 
-        Drawable icon = ContextCompat.getDrawable(mContext, pageType.getTitleDrawableId());
+        Drawable icon = ContextCompat.getDrawable(context, pageType.getTitleDrawableId());
         SpannableStringBuilder sb = new SpannableStringBuilder(" ");
         icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
         ImageSpan span = new ImageSpan(icon, ImageSpan.ALIGN_BASELINE);

@@ -14,7 +14,7 @@ import java.util.List;
 
 class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
-    @NonNull private List<SearchItemModel> mData = new ArrayList<>();
+    @NonNull private List<SearchItemModel> data = new ArrayList<>();
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -25,18 +25,18 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(mData.get(position));
+        holder.bind(data.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
     public void setData(@Nullable Iterable<SearchItemModel> data) {
-        mData.clear();
+        this.data.clear();
         if (data != null) {
-            mData.addAll(Sequences.map(data));
+            this.data.addAll(Sequences.map(data));
         }
         notifyDataSetChanged();
     }

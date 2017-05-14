@@ -5,14 +5,10 @@ import android.support.annotation.NonNull;
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public final class Place {
-    @NonNull
-    public final String id;
-    @NonNull
-    public final String name;
-    @NonNull
-    public final String country;
-    @NonNull
-    public final GeoCoordinate coordinate;
+    @NonNull public final String id;
+    @NonNull public final String name;
+    @NonNull public final String country;
+    @NonNull public final GeoCoordinate coordinate;
 
     private Place(@NonNull String id,
                   @NonNull String name,
@@ -52,34 +48,34 @@ public final class Place {
     }
 
     public static final class Builder {
-        private String mId;
-        private String mName;
-        private String mCountry;
-        private GeoCoordinate mCoordinate;
+        private String id;
+        private String name;
+        private String country;
+        private GeoCoordinate coordinate;
 
         public Builder withId(@NonNull String id) {
-            mId = id;
+            this.id = id;
             return this;
         }
 
         public Builder withName(@NonNull String name) {
-            mName = name;
+            this.name = name;
             return this;
         }
 
         public Builder withCountry(@NonNull String country) {
-            mCountry = country;
+            this.country = country;
             return this;
         }
 
         public Builder withGeoCoordinate(@NonNull GeoCoordinate coordinate) {
-            mCoordinate = coordinate;
+            this.coordinate = coordinate;
             return this;
         }
 
         public Place build() {
-            return new Place(checkNotNull(mId), checkNotNull(mName),
-                    checkNotNull(mCountry), checkNotNull(mCoordinate));
+            return new Place(checkNotNull(id), checkNotNull(name),
+                    checkNotNull(country), checkNotNull(coordinate));
         }
     }
 }
