@@ -9,11 +9,15 @@ import com.utynote.test.utils.Utils;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import javax.inject.Inject;
+
+import io.reactivex.android.plugins.RxAndroidPlugins;
+import io.reactivex.internal.schedulers.ImmediateThinScheduler;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
@@ -29,7 +33,14 @@ public class SearchPresenterTest {
     @Before
     public void setup() {
         SearchComponentFactory.create().inject(this);
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(scheduler ->
+                ImmediateThinScheduler.INSTANCE);
         view = new FakeSearchView();
+    }
+
+    @After
+    public void tearDown() {
+        RxAndroidPlugins.reset();
     }
 
     @HttpResponse(path = "search/geojson/berlin")

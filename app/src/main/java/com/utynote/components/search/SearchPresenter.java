@@ -10,13 +10,15 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
     @Nullable private SearchContract.View view;
-    @Nullable private Subscription subscription;
+    @Nullable private Disposable subscription;
     @NonNull private final SearchProcessor processor;
 
     public SearchPresenter(@NonNull SearchProcessor processor) {
@@ -26,12 +28,15 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void attach(@NonNull SearchContract.View view) {
         this.view = view;
-        processor.subscribe(createSubscriber());
+        this.subscription = Observable
+                .fromPublisher(processor)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onNext, this::onError);
     }
 
     @Override
     public void detach() {
-        checkNotNull(subscription).cancel();
+        checkNotNull(subscription).dispose();
         view = null;
     }
 
@@ -45,36 +50,20 @@ public class SearchPresenter implements SearchContract.Presenter {
         return checkNotNull(view);
     }
 
-    @NonNull
-    private Subscriber<SearchResult> createSubscriber() {
-        return new Subscriber<SearchResult>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                subscription = s;
-                s.request(Long.MAX_VALUE);
-            }
 
-            @Override
-            public void onNext(SearchResult searchResult) {
-                getView().showResults(Observable.fromIterable(searchResult.places)
-                        .map(r -> SearchItemModel.getBuilder()
-                                .withPrimaryTitle(r.name)
-                                .withSecondaryTitle("")
-                                .withPrimarySubtitle(r.country)
-                                .withSecondarySubtitle(r.coordinate.toString())
-                                .build())
-                        .toList()
-                        .blockingGet());
-            }
+    private void onNext(@NonNull SearchResult searchResult) {
+        getView().showResults(Observable.fromIterable(searchResult.places)
+                .map(r -> SearchItemModel.getBuilder()
+                        .withPrimaryTitle(r.name)
+                        .withSecondaryTitle("")
+                        .withPrimarySubtitle(r.country)
+                        .withSecondarySubtitle(r.coordinate.toString())
+                        .build())
+                .toList()
+                .blockingGet());
+    }
 
-            @Override
-            public void onError(Throwable t) {
-                getView().showError(t.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        };
+    private void onError(@NonNull Throwable t) {
+        getView().showError(t.getMessage());
     }
 }

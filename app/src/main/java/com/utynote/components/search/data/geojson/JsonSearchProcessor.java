@@ -84,6 +84,8 @@ public class JsonSearchProcessor extends SearchProcessor {
             .toList()
             .blockingGet();
 
-        subscribers.forEach(s -> s.onNext(new SearchResult(term, places)));
+        Observable
+            .fromIterable(subscribers)
+            .forEach(s -> s.onNext(new SearchResult(term, places)));
     }
 }
