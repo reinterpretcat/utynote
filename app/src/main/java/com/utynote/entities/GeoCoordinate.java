@@ -27,4 +27,9 @@ public final class GeoCoordinate {
         hash = 53 * hash + Double.doubleToLongBits(longitude);
         return Long.valueOf(hash).hashCode();
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s,%s", latitude, longitude);
+    }
 }

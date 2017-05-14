@@ -2,7 +2,6 @@ package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.SpannableString;
 
 import com.utynote.components.search.data.SearchProcessor;
 import com.utynote.components.search.data.SearchResult;
@@ -59,9 +58,10 @@ public class SearchPresenter implements SearchContract.Presenter {
             public void onNext(SearchResult searchResult) {
                 getView().showResults(Observable.fromIterable(searchResult.places)
                         .map(r -> SearchItemModel.getBuilder()
-                                .withPrimaryTitle(new SpannableString(r.name))
-                                .withPrimarySubtitle(new SpannableString(r.country))
-                                .withSecondarySubtitle(new SpannableString(r.coordinate.toString()))
+                                .withPrimaryTitle(r.name)
+                                .withSecondaryTitle("")
+                                .withPrimarySubtitle(r.country)
+                                .withSecondarySubtitle(r.coordinate.toString())
                                 .build())
                         .toList()
                         .blockingGet());

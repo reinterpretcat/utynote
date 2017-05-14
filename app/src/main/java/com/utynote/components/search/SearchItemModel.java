@@ -2,20 +2,19 @@ package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Spannable;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
 public final class SearchItemModel {
-    @NonNull public final Spannable primaryTitle;
-    @Nullable public final Spannable secondaryTitle;
-    @Nullable public final Spannable primarySubtitle;
-    @Nullable public final Spannable secondarySubtitle;
+    @NonNull public final String primaryTitle;
+    @NonNull public final String secondaryTitle;
+    @NonNull public final String primarySubtitle;
+    @NonNull public final String secondarySubtitle;
 
-    private SearchItemModel(@NonNull Spannable primaryTitle,
-                            @NonNull Spannable secondaryTitle,
-                            @NonNull Spannable primarySubtitle,
-                            @NonNull Spannable secondarySubtitle) {
+    private SearchItemModel(@NonNull String primaryTitle,
+                            @NonNull String secondaryTitle,
+                            @NonNull String primarySubtitle,
+                            @NonNull String secondarySubtitle) {
         this.primaryTitle = primaryTitle;
         this.secondaryTitle = secondaryTitle;
         this.primarySubtitle = primarySubtitle;
@@ -27,34 +26,34 @@ public final class SearchItemModel {
     }
 
     static final class Builder {
-        private Spannable mPrimaryTitle;
-        private Spannable mSecondaryTitle;
-        private Spannable mPrimarySubtitle;
-        private Spannable mSecondarySubtitle;
+        private String mPrimaryTitle;
+        private String mSecondaryTitle;
+        private String mPrimarySubtitle;
+        private String mSecondarySubtitle;
 
-        public Builder withPrimaryTitle(@NonNull Spannable content) {
+        public Builder withPrimaryTitle(@NonNull String content) {
             mPrimaryTitle = content;
             return this;
         }
 
-        public Builder withSecondaryTitle(@NonNull Spannable content) {
+        public Builder withSecondaryTitle(@NonNull String content) {
             mSecondaryTitle = content;
             return this;
         }
 
-        public Builder withPrimarySubtitle(@NonNull Spannable content) {
+        public Builder withPrimarySubtitle(@NonNull String content) {
             mPrimarySubtitle = content;
             return this;
         }
 
-        public Builder withSecondarySubtitle(@NonNull Spannable content) {
+        public Builder withSecondarySubtitle(@NonNull String content) {
             mSecondarySubtitle = content;
             return this;
         }
 
         public SearchItemModel build() {
-            return new SearchItemModel(checkNotNull(mPrimaryTitle), mSecondaryTitle,
-                    mPrimarySubtitle, mSecondarySubtitle);
+            return new SearchItemModel(checkNotNull(mPrimaryTitle), checkNotNull(mSecondaryTitle),
+                    checkNotNull(mPrimarySubtitle), checkNotNull(mSecondarySubtitle));
         }
     }
 }
