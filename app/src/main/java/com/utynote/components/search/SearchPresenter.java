@@ -6,9 +6,6 @@ import android.support.annotation.Nullable;
 import com.utynote.components.search.data.SearchProcessor;
 import com.utynote.components.search.data.SearchResult;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -50,15 +47,14 @@ public class SearchPresenter implements SearchContract.Presenter {
         return checkNotNull(view);
     }
 
-
     private void onNext(@NonNull SearchResult searchResult) {
         getView().showResults(Observable.fromIterable(searchResult.places)
                 .map(r -> SearchItemModel.getBuilder()
-                        .withPrimaryTitle(r.name)
-                        .withSecondaryTitle("")
-                        .withPrimarySubtitle(r.country)
-                        .withSecondarySubtitle(r.coordinate.toString())
-                        .build())
+                            .withPrimaryTitle(r.name)
+                            .withSecondaryTitle("")
+                            .withPrimarySubtitle(r.country)
+                            .withSecondarySubtitle(r.coordinate.toString())
+                            .build())
                 .toList()
                 .blockingGet());
     }
