@@ -28,9 +28,7 @@ public class SearchProcessorTest {
 
     @Before
     public void setup() {
-        SearchComponentFactory
-                .create("https://search.mapzen.com/v1/", "geojson")
-                .inject(this);
+        SearchComponentFactory.create().inject(this);
     }
 
     @HttpResponse(path = "search/geojson/berlin")

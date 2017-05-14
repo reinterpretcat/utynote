@@ -6,12 +6,9 @@ import android.text.SpannableString;
 
 import com.utynote.components.search.data.SearchProcessor;
 import com.utynote.components.search.data.SearchResult;
-import com.utynote.utils.Sequences;
 
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-
-import java.util.ArrayList;
 
 import io.reactivex.Observable;
 
@@ -31,9 +28,9 @@ public class SearchPresenter implements SearchContract.Presenter {
         public void onNext(SearchResult searchResult) {
             Iterable<SearchItemModel> results = Observable.fromIterable(searchResult.places)
                     .map(r -> SearchItemModel.getBuilder()
-                    .withPrimaryTitle(SpannableString.valueOf(r.name))
-                    .withPrimarySubtitle(SpannableString.valueOf(r.country))
-                    .withSecondarySubtitle(SpannableString.valueOf(r.coordinate.toString()))
+                    .withPrimaryTitle(new SpannableString(r.name))
+                    .withPrimarySubtitle(new SpannableString(r.country))
+                    .withSecondarySubtitle(new SpannableString(r.coordinate.toString()))
                     .build())
                     .toList()
                     .blockingGet();
@@ -68,25 +65,10 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void search(@NonNull String term) {
         mProcessor.onNext(term);
-
-        /*mRepository
-                .search(term)
-                .map(r -> SearchItemModel.getBuilder()
-                            .withPrimaryTitle(SpannableString.valueOf(r.name))
-                            .withPrimarySubtitle(SpannableString.valueOf(r.country))
-                            .withSecondarySubtitle(SpannableString.valueOf(r.coordinate.toString()))
-                            .build())
-                .reduce(new ArrayList<SearchItemModel>(), Sequences::merge)
-                .subscribe(getView()::showResults, ex -> getView().showError(formatError(ex)));*/
     }
 
     @NonNull
     private SearchContract.View getView() {
         return checkNotNull(mView);
-    }
-
-    @NonNull
-    private String formatError(Throwable tr) {
-        return tr.getMessage();
     }
 }

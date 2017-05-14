@@ -9,8 +9,12 @@ import com.utynote.test.dependencies.DaggerSearchComponent;
 
 public final class SearchComponentFactory {
 
+    public static SearchComponent create() {
+        return create("https://search.mapzen.com/v1/", "geojson");
+    }
+
     public static SearchComponent create(@NonNull String baseUrl, @NonNull String formatType) {
-        return  DaggerSearchComponent.builder()
+        return DaggerSearchComponent.builder()
                 .netModule(new NetModule())
                 .searchModule(new SearchModule(new AppConfig.Builder()
                         .withSearch(baseUrl, formatType)
