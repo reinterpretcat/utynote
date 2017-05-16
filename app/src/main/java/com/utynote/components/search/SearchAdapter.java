@@ -1,7 +1,6 @@
 package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import java.util.List;
 
 class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
-    @NonNull private List<SearchItemModel> data = new ArrayList<>();
+    @NonNull private List<SearchItemData> data = new ArrayList<>();
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,11 +32,9 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
         return data.size();
     }
 
-    public void setData(@Nullable Iterable<SearchItemModel> data) {
+    public void setData(@NonNull SearchViewModel.Data model) {
         this.data.clear();
-        if (data != null) {
-            this.data.addAll(Sequences.asCollection(data));
-        }
+        this.data.addAll(Sequences.asCollection(model.data));
         notifyDataSetChanged();
     }
 
@@ -49,7 +46,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
             mBinding = binding;
         }
 
-        public void bind(@NonNull SearchItemModel model) {
+        public void bind(@NonNull SearchItemData model) {
             mBinding.setModel(model);
         }
     }

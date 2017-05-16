@@ -5,8 +5,7 @@ import android.support.annotation.NonNull;
 final class SearchContract {
 
     public interface View {
-        void showResults(@NonNull Iterable<SearchItemModel> results);
-        void showError(@NonNull String description);
+        void render(@NonNull SearchViewModel.Abstract model);
     }
 
     public interface Presenter {

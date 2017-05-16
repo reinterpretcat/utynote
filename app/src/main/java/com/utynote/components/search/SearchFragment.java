@@ -27,22 +27,27 @@ public class SearchFragment extends Fragment {
     @Nullable @Inject SearchPresenter presenter;
     @NonNull private final SearchAdapter adapter = new SearchAdapter();
 
-    private final SearchContract.View searchView = new SearchContract.View() {
+    private final SearchViewModel.Visitor visitor = new SearchViewModel.Visitor() {
         @Override
-        public void showResults(@NonNull Iterable<SearchItemModel> results) {
-            adapter.setData(results);
+        public void visit(@NonNull SearchViewModel.Busy model) {
+
         }
 
         @Override
-        public void showError(@NonNull String description) {
-            // TODO
+        public void visit(@NonNull SearchViewModel.Error model) {
+
+        }
+
+        @Override
+        public void visit(@NonNull SearchViewModel.Data model) {
+            adapter.setData(model);
         }
     };
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        getPresenter().attach(searchView);
+        getPresenter().attach(model -> model.accept(visitor));
     }
 
     @Override

@@ -1,20 +1,19 @@
 package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import static com.utynote.utils.Preconditions.checkNotNull;
 
-public final class SearchItemModel {
+public final class SearchItemData {
     @NonNull public final String primaryTitle;
     @NonNull public final String secondaryTitle;
     @NonNull public final String primarySubtitle;
     @NonNull public final String secondarySubtitle;
 
-    private SearchItemModel(@NonNull String primaryTitle,
-                            @NonNull String secondaryTitle,
-                            @NonNull String primarySubtitle,
-                            @NonNull String secondarySubtitle) {
+    private SearchItemData(@NonNull String primaryTitle,
+                 @NonNull String secondaryTitle,
+                 @NonNull String primarySubtitle,
+                 @NonNull String secondarySubtitle) {
         this.primaryTitle = primaryTitle;
         this.secondaryTitle = secondaryTitle;
         this.primarySubtitle = primarySubtitle;
@@ -51,8 +50,8 @@ public final class SearchItemModel {
             return this;
         }
 
-        public SearchItemModel build() {
-            return new SearchItemModel(checkNotNull(mPrimaryTitle), checkNotNull(mSecondaryTitle),
+        public SearchItemData build() {
+            return new SearchItemData(checkNotNull(mPrimaryTitle), checkNotNull(mSecondaryTitle),
                     checkNotNull(mPrimarySubtitle), checkNotNull(mSecondarySubtitle));
         }
     }

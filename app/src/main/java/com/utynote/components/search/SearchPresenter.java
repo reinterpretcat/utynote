@@ -48,18 +48,18 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     private void onNext(@NonNull SearchResult searchResult) {
-        getView().showResults(Observable.fromIterable(searchResult.places)
-                .map(r -> SearchItemModel.getBuilder()
-                            .withPrimaryTitle(r.name)
-                            .withSecondaryTitle("")
-                            .withPrimarySubtitle(r.country)
-                            .withSecondarySubtitle(r.coordinate.toString())
-                            .build())
+        getView().render(new SearchViewModel.Data(Observable.fromIterable(searchResult.places)
+                .map(r -> SearchItemData.getBuilder()
+                        .withPrimaryTitle(r.name)
+                        .withSecondaryTitle("")
+                        .withPrimarySubtitle(r.country)
+                        .withSecondarySubtitle(r.coordinate.toString())
+                        .build())
                 .toList()
-                .blockingGet());
+                .blockingGet()));
     }
 
     private void onError(@NonNull Throwable t) {
-        getView().showError(t.getMessage());
+        getView().render(new SearchViewModel.Error(t.getMessage()));
     }
 }

@@ -52,7 +52,7 @@ public class SearchPresenterTest {
 
         assertThat(view.errors, emptyIterable());
         assertThat(view.results, hasSize(1));
-        assertThat(view.results.get(0), hasItem(match(SearchItemModel.getBuilder()
+        assertThat(view.results.get(0).data, hasItem(match(SearchItemData.getBuilder()
                 .withPrimaryTitle("Berlin")
                 .withSecondaryTitle("")
                 .withPrimarySubtitle("Germany")
@@ -73,10 +73,10 @@ public class SearchPresenterTest {
     }
 
     @NonNull
-    private TypeSafeMatcher<SearchItemModel> match(@NonNull final SearchItemModel model) {
-        return new TypeSafeMatcher<SearchItemModel>() {
+    private TypeSafeMatcher<SearchItemData> match(@NonNull final SearchItemData model) {
+        return new TypeSafeMatcher<SearchItemData>() {
             @Override
-            protected boolean matchesSafely(SearchItemModel item) {
+            protected boolean matchesSafely(SearchItemData item) {
                 return Utils.equals(model.primaryTitle, item.primaryTitle) &&
                         Utils.equals(model.secondaryTitle, item.secondaryTitle) &&
                         Utils.equals(model.primarySubtitle, item.primarySubtitle) &&

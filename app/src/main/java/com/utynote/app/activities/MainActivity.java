@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         toggle.syncState();
 
         fragments = new Fragments(getSupportFragmentManager());
-        
+
         if (savedInstanceState == null) {
             fragments
                     .addToContent(MapFragment.TAG, MapFragment::new)

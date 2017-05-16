@@ -7,16 +7,28 @@ import java.util.List;
 
 final class FakeSearchView implements SearchContract.View {
 
-    @NonNull public final List<Iterable<SearchItemModel>> results = new ArrayList<>();
-    @NonNull public final List<String> errors = new ArrayList<>();
+    @NonNull public final List<SearchViewModel.Data> results = new ArrayList<>();
+    @NonNull public final List<SearchViewModel.Error> errors = new ArrayList<>();
+    @NonNull public final List<SearchViewModel.Busy> busy = new ArrayList<>();
+
 
     @Override
-    public void showResults(@NonNull Iterable<SearchItemModel> results) {
-        this.results.add(results);
-    }
+    public void render(@NonNull SearchViewModel.Abstract model) {
+        model.accept(new SearchViewModel.Visitor() {
+            @Override
+            public void visit(@NonNull SearchViewModel.Busy model) {
+                busy.add(model);
+            }
 
-    @Override
-    public void showError(@NonNull String description) {
-        this.errors.add(description);
+            @Override
+            public void visit(@NonNull SearchViewModel.Error model) {
+                errors.add(model);
+            }
+
+            @Override
+            public void visit(@NonNull SearchViewModel.Data model) {
+                results.add(model);
+            }
+        });
     }
 }
