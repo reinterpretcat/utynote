@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements ContentView,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragments = new Fragments(getSupportFragmentManager());
-
         binding = DataBindingUtil.setContentView(this, R.layout.main_content);
         setSupportActionBar(binding.toolbar);
 
@@ -56,9 +54,13 @@ public class MainActivity extends AppCompatActivity implements ContentView,
         binding.drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        fragments
-                .addToContent(MapFragment.TAG, MapFragment::new)
-                .addToPanel(NearbyFragment.TAG, NearbyFragment::new);
+        fragments = new Fragments(getSupportFragmentManager());
+        
+        if (savedInstanceState == null) {
+            fragments
+                    .addToContent(MapFragment.TAG, MapFragment::new)
+                    .addToPanel(NearbyFragment.TAG, NearbyFragment::new);
+        }
     }
 
     @Override
