@@ -1,6 +1,5 @@
 package com.utynote.components.nearby;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,29 +19,30 @@ import static com.utynote.utils.Preconditions.checkNotNull;
 public class NearbyFragment extends Fragment {
     public static final String TAG = NearbyFragment.class.getSimpleName();
 
+    @Nullable
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.nearby_container_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.nearby_pager);
+        viewPager.setAdapter(new NearbyAdapter(getFragmentManager(), getContext()));
+
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.nearby_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         panel.setParallaxOffset(getResources().getDimensionPixelSize(R.dimen.nearby_panel_paralax));
         panel.setTouchEnabled(true);
         panel.setAnchorPoint(0.6f);
         panel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
-        View view =  inflater.inflate(R.layout.nearby_container_view, container, false);
-
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.nearby_pager);
-        viewPager.setAdapter(new NearbyAdapter(getFragmentManager(), getContext()));
-
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.nearby_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        return view;
     }
 
     @NonNull

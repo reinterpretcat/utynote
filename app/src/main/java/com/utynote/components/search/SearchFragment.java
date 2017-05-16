@@ -42,8 +42,29 @@ public class SearchFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         getPresenter().attach(searchView);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getPresenter().detach();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
+        return inflater.inflate(R.layout.search_container_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        ((RecyclerView) view).setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         SlidingUpPanelLayout panel = getContentView().getSlidingPanel();
         Toolbar toolbar = getContentView().getToolbar();
@@ -56,21 +77,6 @@ public class SearchFragment extends Fragment {
         panel.setTouchEnabled(false);
         panel.setAnchorPoint(anchor);
         panel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        getPresenter().detach();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle bundle) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.search_container_view, container, false);
-        recyclerView.setAdapter(adapter);
-
-        return recyclerView;
     }
 
     public void onSearchTerm(@NonNull CharSequence term) {
