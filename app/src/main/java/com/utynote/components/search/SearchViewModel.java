@@ -2,6 +2,13 @@ package com.utynote.components.search;
 
 import android.support.annotation.NonNull;
 
+import com.utynote.utils.Sequences;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 final class SearchViewModel {
 
     interface Visitor {
@@ -35,10 +42,10 @@ final class SearchViewModel {
     }
 
     static final class Data implements Abstract {
-        @NonNull public final Iterable<SearchItemData> data;
+        @NonNull public final List<SearchItemData> data;
 
         public Data(@NonNull Iterable<SearchItemData> data) {
-            this.data = data;
+            this.data = Collections.unmodifiableList(Sequences.asList(data));
         }
 
         @Override
