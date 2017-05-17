@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.utynote.databinding.SearchItemViewBinding;
+import com.utynote.databinding.SearchViewItemBinding;
 import com.utynote.utils.Sequences;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        SearchItemViewBinding binding = SearchItemViewBinding.inflate(layoutInflater, parent, false);
+        SearchViewItemBinding binding = SearchViewItemBinding.inflate(layoutInflater, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -39,9 +39,9 @@ class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @NonNull private final SearchItemViewBinding mBinding;
+        @NonNull private final SearchViewItemBinding mBinding;
 
-        public ViewHolder(@NonNull SearchItemViewBinding binding) {
+        public ViewHolder(@NonNull SearchViewItemBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
         }
