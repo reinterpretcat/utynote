@@ -47,8 +47,8 @@ class SearchPresenterTest {
 
         presenter.search("Berlin")
 
-        assertThat<List<SearchViewModel.Error>>(view!!.errors, emptyIterable<Any>())
-        assertThat<List<SearchViewModel.Data>>(view!!.results, hasSize<Any>(1))
+        assertThat<List<SearchContract.ViewModel.Error>>(view!!.errors, emptyIterable<Any>())
+        assertThat<List<SearchContract.ViewModel.Data>>(view!!.results, hasSize<Any>(1))
         assertThat(view!!.results[0].data, hasItem(match(SearchItemData(
                 primaryTitle = "Berlin",
                 secondaryTitle = "",
@@ -64,8 +64,8 @@ class SearchPresenterTest {
 
         presenter.search("Berlin")
 
-        assertThat<List<SearchViewModel.Data>>(view!!.results, emptyIterable<Any>())
-        assertThat<List<SearchViewModel.Error>>(view!!.errors, emptyIterable<Any>())
+        assertThat<List<SearchContract.ViewModel.Data>>(view!!.results, emptyIterable<Any>())
+        assertThat<List<SearchContract.ViewModel.Error>>(view!!.errors, emptyIterable<Any>())
     }
 
     private fun match(model: SearchItemData): TypeSafeMatcher<SearchItemData> {

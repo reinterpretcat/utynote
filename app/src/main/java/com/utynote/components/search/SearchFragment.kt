@@ -21,7 +21,7 @@ class SearchFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         presenter.attach(object : SearchContract.View {
-            override fun render(model: SearchViewModel.Abstract) {
+            override fun render(model: SearchContract.ViewModel) {
                 adapter.setModel(model)
             }
         })

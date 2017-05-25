@@ -4,15 +4,15 @@ import java.util.*
 
 internal class FakeSearchView : SearchContract.View {
 
-    val results: MutableList<SearchViewModel.Data> = ArrayList()
-    val errors: MutableList<SearchViewModel.Error> = ArrayList()
-    val busy: MutableList<SearchViewModel.Busy> = ArrayList()
+    val results: MutableList<SearchContract.ViewModel.Data> = ArrayList()
+    val errors: MutableList<SearchContract.ViewModel.Error> = ArrayList()
+    val busy: MutableList<SearchContract.ViewModel.Busy> = ArrayList()
 
-    override fun render(model: SearchViewModel.Abstract) {
+    override fun render(model: SearchContract.ViewModel) {
         when (model) {
-            is SearchViewModel.Busy ->  busy.add(model)
-            is SearchViewModel.Error ->  errors.add(model)
-            is SearchViewModel.Data -> results.add(model)
+            is SearchContract.ViewModel.Busy  -> busy.add(model)
+            is SearchContract.ViewModel.Error -> errors.add(model)
+            is SearchContract.ViewModel.Data  -> results.add(model)
         }
     }
 }

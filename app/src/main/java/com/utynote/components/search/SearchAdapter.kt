@@ -10,12 +10,12 @@ import com.utynote.databinding.SearchViewItemBinding
 
 internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
-    private var model: SearchViewModel.Abstract? = null
+    private var model: SearchContract.ViewModel? = null
 
     override fun getItemViewType(position: Int): Int {
         when (model) {
-            is SearchViewModel.Busy -> return R.layout.search_view_busy
-            is SearchViewModel.Error -> return  R.layout.search_view_error
+            is SearchContract.ViewModel.Busy -> return R.layout.search_view_busy
+            is SearchContract.ViewModel.Error -> return  R.layout.search_view_error
             else -> return R.layout.search_view_item
         }
     }
@@ -33,22 +33,22 @@ internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val m = model
         when (m) {
-            is SearchViewModel.Busy -> holder.bind()
-            is SearchViewModel.Error -> holder.bind(m.description)
-            is SearchViewModel.Data -> holder.bind(m.data[position])
+            is SearchContract.ViewModel.Busy -> holder.bind()
+            is SearchContract.ViewModel.Error -> holder.bind(m.description)
+            is SearchContract.ViewModel.Data -> holder.bind(m.data[position])
         }
     }
 
     override fun getItemCount(): Int {
         val m = model
         when (m) {
-            is SearchViewModel.Data -> return m.data.size
+            is SearchContract.ViewModel.Data -> return m.data.size
             null -> return 0
             else -> return 1
         }
     }
 
-    fun setModel(model: SearchViewModel.Abstract) {
+    fun setModel(model: SearchContract.ViewModel) {
         this.model = model
         notifyDataSetChanged()
     }

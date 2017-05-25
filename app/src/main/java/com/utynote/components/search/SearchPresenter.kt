@@ -30,7 +30,7 @@ class SearchPresenter(private val processor: SearchProcessor) : SearchContract.P
     }
 
     private fun onNext(searchResult: SearchResult) {
-    view!!.render(SearchViewModel.Data(searchResult.places
+    view!!.render(SearchContract.ViewModel.Data(searchResult.places
                 .map { (_, name, country, coordinate) -> SearchItemData(
                             primaryTitle = name,
                             secondaryTitle = "",
@@ -39,6 +39,6 @@ class SearchPresenter(private val processor: SearchProcessor) : SearchContract.P
     }
 
     private fun onError(t: Throwable) {
-        view!!.render(SearchViewModel.Error(description = t.message!!))
+        view!!.render(SearchContract.ViewModel.Error(description = t.message!!))
     }
 }
