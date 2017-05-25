@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.jakewharton.rxbinding2.view.MenuItemActionViewCollapseEvent
 import com.jakewharton.rxbinding2.view.MenuItemActionViewEvent
 import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.utynote.R
 import com.utynote.app.AppRoot
 import com.utynote.components.ContentView
@@ -25,7 +26,6 @@ import com.utynote.components.nearby.NearbyFragment
 import com.utynote.components.search.SearchFragment
 import com.utynote.databinding.MainContentBinding
 import com.utynote.utils.Fragments
-import com.utynote.widgets.panel.SlidingUpPanelLayout
 import rx.Observable
 import java.util.concurrent.TimeUnit
 

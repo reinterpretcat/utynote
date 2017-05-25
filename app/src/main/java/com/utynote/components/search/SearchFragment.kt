@@ -8,9 +8,9 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.utynote.R
 import com.utynote.components.ContentView
-import com.utynote.widgets.panel.SlidingUpPanelLayout
 import javax.inject.Inject
 
 class SearchFragment : Fragment() {
