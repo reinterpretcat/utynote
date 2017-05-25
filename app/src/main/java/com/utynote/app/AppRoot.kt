@@ -12,7 +12,7 @@ import com.utynote.app.dependencies.search.SearchModule
 
 
 class AppRoot : Application() {
-    private var searchComponent: SearchComponent? = null
+    private lateinit var searchComponent: SearchComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -30,6 +30,6 @@ class AppRoot : Application() {
     }
 
     fun getSearchComponent(): SearchComponent {
-        return checkNotNull(searchComponent)
+        return searchComponent
     }
 }

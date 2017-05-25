@@ -30,52 +30,50 @@ import rx.Observable
 import java.util.concurrent.TimeUnit
 
 
-class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), ContentView {
 
-    private var fragments: Fragments? = null
-    private var binding: MainContentBinding? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView<MainContentBinding>(this, R.layout.main_content)
-        setSupportActionBar(binding!!.toolbar)
-
-        binding!!.navigationView.setNavigationItemSelectedListener(this)
-
-        val toggle = ActionBarDrawerToggle(this, binding!!.drawerLayout, binding!!.toolbar,
-                R.string.navigation_drawer_open,  R.string.navigation_drawer_close)
-        binding!!.drawerLayout.setDrawerListener(toggle)
-        toggle.syncState()
-
-        fragments = Fragments(supportFragmentManager)
-
-        if (savedInstanceState == null) {
-            fragments!!
-                    .addToContent(MapFragment.TAG, { MapFragment() })
-                    .addToPanel(NearbyFragment.TAG, { NearbyFragment() })
-        }
-    }
-
-    override fun onBackPressed() {
-        if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding!!.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    private val navListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_notes    -> { }
             R.id.nav_places   -> { }
             R.id.nav_calendar -> { }
             R.id.nav_help     -> { }
-            R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+            R.id.nav_settings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        true
+    }
+
+    private lateinit var fragments: Fragments
+    private lateinit var binding: MainContentBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = DataBindingUtil.setContentView<MainContentBinding>(this, R.layout.main_content)
+
+        with(binding) {
+            setSupportActionBar(toolbar)
+            val toggle = ActionBarDrawerToggle(this@MainActivity, drawerLayout, toolbar,
+                    R.string.navigation_drawer_open,  R.string.navigation_drawer_close)
+            navigationView.setNavigationItemSelectedListener(navListener)
+            drawerLayout.setDrawerListener(toggle)
+            toggle.syncState()
         }
 
-        binding!!.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
+        fragments = Fragments(supportFragmentManager)
+
+        savedInstanceState ?: fragments
+                .addToContent(MapFragment.TAG, { MapFragment() })
+                .addToPanel(NearbyFragment.TAG, { NearbyFragment() })
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -85,25 +83,25 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe { e ->
             when (e) {
-                is MenuItemActionViewExpandEvent   -> fragments!!.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() })
-                is MenuItemActionViewCollapseEvent -> fragments!!.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() })
+                is MenuItemActionViewExpandEvent   -> fragments.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() })
+                is MenuItemActionViewCollapseEvent -> fragments.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() })
             }
         }
 
         RxSearchView.queryTextChangeEvents(searchMenuItem.actionView as SearchView)
                 .filter { e -> e.queryText().length > 2 }
                 .debounce(1, TimeUnit.SECONDS)
-                .filter { fragments!!.isAttached(SearchFragment.TAG) }
+                .filter { fragments.isAttached(SearchFragment.TAG) }
                 .subscribe { e ->
-                    fragments!!.find(SearchFragment.TAG, SearchFragment::class.java).onSearchTerm(e.queryText())
+                    fragments.find(SearchFragment.TAG, SearchFragment::class.java).onSearchTerm(e.queryText())
                 }
 
         return true
     }
 
-    override val toolbar: Toolbar get() = binding!!.toolbar
+    override val toolbar: Toolbar get() = binding.toolbar
 
-    override val slidingPanel: SlidingUpPanelLayout get() = binding!!.slidingLayout
+    override val slidingPanel: SlidingUpPanelLayout get() = binding.slidingLayout
 
     private fun createSearchFragment(): SearchFragment {
         val fragment = SearchFragment()

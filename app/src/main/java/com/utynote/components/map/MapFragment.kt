@@ -23,10 +23,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.map_container_view, container, false)
 
-        val fab = view.findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view1 ->
-            Snackbar
-                    .make(view1, "Searching your location..", Snackbar.LENGTH_SHORT)
+        (view.findViewById(R.id.fab) as FloatingActionButton)
+                .setOnClickListener { v -> Snackbar
+                    .make(v, "Searching your location..", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null)
                     .show()
         }
@@ -46,9 +45,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        val sydney = LatLng(52.53174, 13.38771)
-        map!!.addMarker(MarkerOptions().position(sydney).title("Marker"))
-        map!!.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 18f))
+        val berlin = LatLng(52.53174, 13.38771)
+        googleMap.addMarker(MarkerOptions().position(berlin).title("Marker"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(berlin, 18f))
     }
 
     companion object {

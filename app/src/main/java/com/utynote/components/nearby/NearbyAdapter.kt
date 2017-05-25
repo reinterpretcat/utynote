@@ -18,9 +18,9 @@ import com.utynote.components.nearby.places.PlacesFragment
 
 internal class NearbyAdapter(fragmentManager: FragmentManager, private val context: Context) : FragmentPagerAdapter(fragmentManager) {
 
-    private enum class PageTypes private constructor(@param:DrawableRes
-                                                     val titleDrawableId: Int,
-                                                     val fragmentType: Class<*>) {
+    private enum class PageTypes constructor(@param:DrawableRes
+                                             val titleDrawableId: Int,
+                                             val fragmentType: Class<*>) {
         PLACES(R.drawable.ic_nearby_places, PlacesFragment::class.java),
         DEPARTURES(R.drawable.ic_nearby_departures, DeparturesFragment::class.java),
         LIVE(R.drawable.ic_nearby_live, LiveFragment::class.java)

@@ -21,22 +21,21 @@ class NearbyFragment : Fragment() {
         val viewPager = view!!.findViewById(R.id.nearby_pager) as ViewPager
         viewPager.adapter = NearbyAdapter(fragmentManager, context)
 
-        val tabLayout = view.findViewById(R.id.nearby_tabs) as TabLayout
-        tabLayout.setupWithViewPager(viewPager)
+        (view.findViewById(R.id.nearby_tabs) as TabLayout).setupWithViewPager(viewPager)
     }
 
     override fun onStart() {
         super.onStart()
 
-        val panel = contentView.slidingPanel
-        panel.setParallaxOffset(resources.getDimensionPixelSize(R.dimen.nearby_panel_paralax))
-        panel.isTouchEnabled = true
-        panel.anchorPoint = 0.6f
-        panel.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+       with(contentView.slidingPanel) {
+           setParallaxOffset(resources.getDimensionPixelSize(R.dimen.nearby_panel_paralax))
+           isTouchEnabled = true
+           anchorPoint = 0.6f
+           panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+       }
     }
 
-    private val contentView: ContentView
-        get() = checkNotNull(activity as ContentView)
+    private val contentView: ContentView get() = activity as ContentView
 
     companion object {
         val TAG = NearbyFragment::class.java.simpleName

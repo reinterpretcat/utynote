@@ -43,17 +43,16 @@ class SearchFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        val panel = contentView.slidingPanel
         val toolbar = contentView.toolbar
-
         val metrics = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(metrics)
-        val anchor = (metrics.heightPixels - toolbar.measuredHeight) / metrics.heightPixels.toFloat()
 
-        panel.setParallaxOffset(0)
-        panel.isTouchEnabled = false
-        panel.anchorPoint = anchor
-        panel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+        with (contentView.slidingPanel) {
+            setParallaxOffset(0)
+            isTouchEnabled = false
+            anchorPoint = (metrics.heightPixels - toolbar.measuredHeight) / metrics.heightPixels.toFloat()
+            panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+        }
     }
 
     fun onSearchTerm(term: CharSequence) {
