@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/utynote_kt.iml" filepath="$PROJECT_DIR$/utynote_kt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/utynote.iml" filepath="$PROJECT_DIR$/utynote.iml" />
     </modules>
   </component>
 </project>
