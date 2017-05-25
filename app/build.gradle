@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 25
@@ -11,9 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -29,26 +29,27 @@ android {
         enabled = true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
+    flavorDimensions 'mode'
     productFlavors {
         mock {
             applicationIdSuffix = ".mock"
+            dimension "mode"
         }
         prod {
-
+            dimension "mode"
         }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile(deps.androidTest.espresso.core, {
+    //testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    kapt "com.android.databinding:compiler:$android_plugin_version"
+
     compile deps.tools.support.appcompat
     compile deps.tools.support.cardview
     compile deps.tools.support.design
@@ -59,7 +60,7 @@ dependencies {
 
     testCompile deps.test.junit.lib
     testCompile deps.test.hamcrest
-    testAnnotationProcessor deps.tools.dagger.compiler
+    kaptTest deps.tools.dagger.compiler
 
     compile deps.tools.rx.java
     compile deps.tools.rx.android
@@ -74,6 +75,6 @@ dependencies {
     compile deps.tools.google.maps
 
     compile deps.tools.dagger.lib
-    annotationProcessor deps.tools.dagger.compiler
+    kapt deps.tools.dagger.compiler
     provided deps.tools.dagger.annotations
 }

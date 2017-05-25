@@ -211,7 +211,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
     private boolean mIsScrollableViewHandlingTouch = false;
 
     private List<PanelSlideListener> mPanelSlideListeners = new ArrayList<>();
-    private View.OnClickListener mFadeOnClickListener;
+    private OnClickListener mFadeOnClickListener;
 
     private final ViewDragHelper mDragHelper;
 
@@ -516,7 +516,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
      * not provided, the clicks on the dimmed area are passed through to the main layout.
      * @param listener
      */
-    public void setFadeOnClickListener(View.OnClickListener listener) {
+    public void setFadeOnClickListener(OnClickListener listener) {
         mFadeOnClickListener = listener;
     }
 
@@ -1422,7 +1422,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
         }
     }
 
-    public static class LayoutParams extends ViewGroup.MarginLayoutParams {
+    public static class LayoutParams extends MarginLayoutParams {
         private static final int[] ATTRS = new int[]{
                 android.R.attr.layout_weight
         };
@@ -1442,7 +1442,7 @@ public class SlidingUpPanelLayout extends ViewGroup {
             this.weight = weight;
         }
 
-        public LayoutParams(android.view.ViewGroup.LayoutParams source) {
+        public LayoutParams(ViewGroup.LayoutParams source) {
             super(source);
         }
 
