@@ -67,10 +67,10 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_notes -> { }
-            R.id.nav_places -> { }
+            R.id.nav_notes    -> { }
+            R.id.nav_places   -> { }
             R.id.nav_calendar -> { }
-            R.id.nav_help -> { }
+            R.id.nav_help     -> { }
             R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
         }
 
@@ -84,13 +84,10 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
         val searchMenuItem = menu.findItem(R.id.action_search)
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe { e ->
-            listOf(e)
-                .filter { e is MenuItemActionViewExpandEvent}
-                .forEach { fragments!!.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() }) }
-
-            listOf(e)
-                    .filter { e is MenuItemActionViewCollapseEvent}
-                    .forEach { fragments!!.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() }) }
+            when (e) {
+                is MenuItemActionViewExpandEvent   -> fragments!!.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() })
+                is MenuItemActionViewCollapseEvent -> fragments!!.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() })
+            }
         }
 
         RxSearchView.queryTextChangeEvents(searchMenuItem.actionView as SearchView)
@@ -104,11 +101,9 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
         return true
     }
 
-    override val toolbar: Toolbar
-        get() = checkNotNull(binding!!.toolbar)
+    override val toolbar: Toolbar get() = binding!!.toolbar
 
-    override val slidingPanel: SlidingUpPanelLayout
-        get() = checkNotNull(binding!!.slidingLayout)
+    override val slidingPanel: SlidingUpPanelLayout get() = binding!!.slidingLayout
 
     private fun createSearchFragment(): SearchFragment {
         val fragment = SearchFragment()
