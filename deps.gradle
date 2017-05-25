@@ -9,6 +9,10 @@ ext {
             rxbinding : '2.0.0'
     ]
 
+    deps.widgets = [
+            sliding_panel : 'com.sothree.slidinguppanel:library:3.3.1'
+    ]
+
     deps.tools = [
             dagger  : [
                     annotations : 'javax.annotation:jsr250-api:1.0',

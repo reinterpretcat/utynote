@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
 
         binding!!.navigationView.setNavigationItemSelectedListener(this)
 
-        val toggle = ActionBarDrawerToggle(this, binding!!.drawerLayout,
-                binding!!.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, binding!!.drawerLayout, binding!!.toolbar,
+                R.string.navigation_drawer_open,  R.string.navigation_drawer_close)
         binding!!.drawerLayout.setDrawerListener(toggle)
         toggle.syncState()
 
@@ -66,18 +66,12 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == R.id.nav_notes) {
-
-        } else if (id == R.id.nav_places) {
-
-        } else if (id == R.id.nav_calendar) {
-
-        } else if (id == R.id.nav_settings) {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        } else if (id == R.id.nav_help) {
-
+        when (item.itemId) {
+            R.id.nav_notes -> { }
+            R.id.nav_places -> { }
+            R.id.nav_calendar -> { }
+            R.id.nav_help -> { }
+            R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         binding!!.drawerLayout.closeDrawer(GravityCompat.START)
@@ -90,26 +84,20 @@ class MainActivity : AppCompatActivity(), ContentView, NavigationView.OnNavigati
         val searchMenuItem = menu.findItem(R.id.action_search)
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe { e ->
-            Observable.just<MenuItemActionViewEvent>(e)
-                    .ofType(MenuItemActionViewExpandEvent::class.java)
-                    .subscribe { expand ->
-                        Log.d("###", "MenuItemActionViewExpandEvent")
-                        fragments!!.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() })
-                    }
-            Observable.just<MenuItemActionViewEvent>(e)
-                    .ofType(MenuItemActionViewCollapseEvent::class.java)
-                    .subscribe { collapse ->
-                        Log.d("###", "MenuItemActionViewCollapseEvent")
-                        fragments!!.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() })
-                    }
+            listOf(e)
+                .filter { e is MenuItemActionViewExpandEvent}
+                .forEach { fragments!!.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() }) }
+
+            listOf(e)
+                    .filter { e is MenuItemActionViewCollapseEvent}
+                    .forEach { fragments!!.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() }) }
         }
 
         RxSearchView.queryTextChangeEvents(searchMenuItem.actionView as SearchView)
                 .filter { e -> e.queryText().length > 2 }
                 .debounce(1, TimeUnit.SECONDS)
-                .filter { e -> fragments!!.isAttached(SearchFragment.TAG) }
+                .filter { fragments!!.isAttached(SearchFragment.TAG) }
                 .subscribe { e ->
-                    Log.d("###", "queryTextChangeEvents")
                     fragments!!.find(SearchFragment.TAG, SearchFragment::class.java).onSearchTerm(e.queryText())
                 }
 
