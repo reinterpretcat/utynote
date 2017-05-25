@@ -56,8 +56,8 @@ class JsonSearchProcessor(private val service: SearchService) : SearchProcessor(
         val places = data.features!!
                 .filter { f -> "Point" == f.geometry!!.type }
                 .map { f -> Place(id = f.properties!!.id!!,
-                                  name = f.properties!!.id!!,
-                                  country = f.properties!!.id!!,
+                                  name = f.properties!!.name!!,
+                                  country = f.properties!!.country!!,
                                   coordinate = GeoCoordinate(
                                           f.geometry!!.coordinates!![1],
                                           f.geometry!!.coordinates!![0])) }
