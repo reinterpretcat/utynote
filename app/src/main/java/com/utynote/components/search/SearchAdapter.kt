@@ -10,7 +10,7 @@ import com.utynote.databinding.SearchViewItemBinding
 
 internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
-    private lateinit var model: SearchViewModel.Abstract
+    private var model: SearchViewModel.Abstract? = null
 
     override fun getItemViewType(position: Int): Int {
         when (model) {
@@ -43,6 +43,7 @@ internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() 
         val m = model
         when (m) {
             is SearchViewModel.Data -> return m.data.size
+            null -> return 0
             else -> return 1
         }
     }

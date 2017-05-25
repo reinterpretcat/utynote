@@ -31,7 +31,7 @@ class SearchPresenterTest {
     @Before
     fun setup() {
         SearchComponentFactory.create().inject(this)
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler -> ImmediateThinScheduler.INSTANCE }
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { ImmediateThinScheduler.INSTANCE }
         view = FakeSearchView()
     }
 
