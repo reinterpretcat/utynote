@@ -4,18 +4,16 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import com.jakewharton.rxbinding2.support.v4.view.RxMenuItemCompat
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.jakewharton.rxbinding2.view.MenuItemActionViewCollapseEvent
-import com.jakewharton.rxbinding2.view.MenuItemActionViewEvent
 import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.utynote.R
@@ -26,7 +24,6 @@ import com.utynote.components.nearby.NearbyFragment
 import com.utynote.components.search.SearchFragment
 import com.utynote.databinding.MainContentBinding
 import com.utynote.utils.Fragments
-import rx.Observable
 import java.util.concurrent.TimeUnit
 
 
@@ -68,6 +65,15 @@ class MainActivity : AppCompatActivity(), ContentView {
                 .addToPanel(NearbyFragment.TAG, { NearbyFragment() })
     }
 
+    override fun onAttachFragment(fragment: Fragment?) {
+        val f = fragment!!
+        when (f) {
+            is SearchFragment -> (application as AppRoot).getSearchComponent().inject(f)
+        }
+
+        super.onAttachFragment(fragment)
+    }
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -83,7 +89,7 @@ class MainActivity : AppCompatActivity(), ContentView {
 
         RxMenuItemCompat.actionViewEvents(searchMenuItem).subscribe { e ->
             when (e) {
-                is MenuItemActionViewExpandEvent   -> fragments.replaceInPanel(SearchFragment.TAG, { this.createSearchFragment() })
+                is MenuItemActionViewExpandEvent   -> fragments.replaceInPanel(SearchFragment.TAG, { SearchFragment() })
                 is MenuItemActionViewCollapseEvent -> fragments.replaceInPanel(NearbyFragment.TAG, { NearbyFragment() })
             }
         }
@@ -102,10 +108,4 @@ class MainActivity : AppCompatActivity(), ContentView {
     override val toolbar: Toolbar get() = binding.toolbar
 
     override val slidingPanel: SlidingUpPanelLayout get() = binding.slidingLayout
-
-    private fun createSearchFragment(): SearchFragment {
-        val fragment = SearchFragment()
-        (application as AppRoot).getSearchComponent().inject(fragment)
-        return fragment
-    }
 }

@@ -18,20 +18,6 @@ class SearchFragment : Fragment() {
     @Inject lateinit var presenter: SearchPresenter
     private val adapter = SearchAdapter()
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        presenter.attach(object : SearchContract.View {
-            override fun render(model: SearchContract.ViewModel) {
-                adapter.setModel(model)
-            }
-        })
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        presenter.detach()
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?): View? {
         return inflater!!.inflate(R.layout.search_container_view, container, false)
     }
@@ -53,6 +39,20 @@ class SearchFragment : Fragment() {
             anchorPoint = (metrics.heightPixels - toolbar.measuredHeight) / metrics.heightPixels.toFloat()
             panelState = SlidingUpPanelLayout.PanelState.ANCHORED
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.attach(object : SearchContract.View {
+            override fun render(model: SearchContract.ViewModel) {
+                adapter.setModel(model)
+            }
+        })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.detach()
     }
 
     fun onSearchTerm(term: CharSequence) {
