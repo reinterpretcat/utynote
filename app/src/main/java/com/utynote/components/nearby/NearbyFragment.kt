@@ -7,9 +7,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.utynote.R
-import com.utynote.components.ContentView
 
 class NearbyFragment : Fragment() {
 
@@ -23,19 +21,6 @@ class NearbyFragment : Fragment() {
 
         (view.findViewById(R.id.nearby_tabs) as TabLayout).setupWithViewPager(viewPager)
     }
-
-    override fun onStart() {
-        super.onStart()
-
-       with(contentView.slidingPanel) {
-           setParallaxOffset(resources.getDimensionPixelSize(R.dimen.nearby_panel_paralax))
-           isTouchEnabled = true
-           anchorPoint = 0.6f
-           panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
-       }
-    }
-
-    private val contentView: ContentView get() = activity as ContentView
 
     companion object {
         val TAG = NearbyFragment::class.java.simpleName

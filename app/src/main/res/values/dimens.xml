@@ -5,5 +5,9 @@
     <dimen name="nav_header_height">140dp</dimen>
     <dimen name="panel_header_height">42dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="search_panel_anchor">60dp</dimen>
+    <dimen name="search_panel_paralax">0dp</dimen>
+    <dimen name="nearby_panel_anchor">300dp</dimen>
     <dimen name="nearby_panel_paralax">100dp</dimen>
 </resources>

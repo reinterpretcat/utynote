@@ -1,6 +1,7 @@
 package com.utynote.app.activities
 
 import android.content.Intent
+import android.content.res.Resources
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -9,7 +10,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import com.jakewharton.rxbinding2.support.v4.view.RxMenuItemCompat
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
@@ -18,7 +18,6 @@ import com.jakewharton.rxbinding2.view.MenuItemActionViewExpandEvent
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.utynote.R
 import com.utynote.app.AppRoot
-import com.utynote.components.ContentView
 import com.utynote.components.map.MapFragment
 import com.utynote.components.nearby.NearbyFragment
 import com.utynote.components.search.SearchFragment
@@ -27,7 +26,12 @@ import com.utynote.utils.Fragments
 import java.util.concurrent.TimeUnit
 
 
-class MainActivity : AppCompatActivity(), ContentView {
+class MainActivity : AppCompatActivity() {
+
+    private class PanelConfig (val parallax : Int,
+                               val touch: Boolean,
+                               val anchor: Float,
+                               val state : SlidingUpPanelLayout.PanelState)
 
     private val navListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -37,19 +41,21 @@ class MainActivity : AppCompatActivity(), ContentView {
             R.id.nav_help     -> { }
             R.id.nav_settings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
         }
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
+        binding!!.drawerLayout.closeDrawer(GravityCompat.START)
         true
     }
 
-    private lateinit var fragments: Fragments
-    private lateinit var binding: MainContentBinding
+    private val fragments: Fragments = Fragments(supportFragmentManager)
+
+    private var panelConfig: PanelConfig = PanelConfig(0, false, 0f, SlidingUpPanelLayout.PanelState.HIDDEN)
+    private var binding: MainContentBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView<MainContentBinding>(this, R.layout.main_content)
 
-        with(binding) {
+        with(binding!!) {
             setSupportActionBar(toolbar)
             val toggle = ActionBarDrawerToggle(this@MainActivity, drawerLayout, toolbar,
                     R.string.navigation_drawer_open,  R.string.navigation_drawer_close)
@@ -58,25 +64,44 @@ class MainActivity : AppCompatActivity(), ContentView {
             toggle.syncState()
         }
 
-        fragments = Fragments(supportFragmentManager)
-
         savedInstanceState ?: fragments
                 .addToContent(MapFragment.TAG, { MapFragment() })
                 .addToPanel(NearbyFragment.TAG, { NearbyFragment() })
     }
 
     override fun onAttachFragment(fragment: Fragment?) {
-        val f = fragment!!
-        when (f) {
-            is SearchFragment -> (application as AppRoot).getSearchComponent().inject(f)
-        }
-
         super.onAttachFragment(fragment)
+        val f = fragment!!
+
+        panelConfig = when (f) {
+            is SearchFragment -> {
+                (application as AppRoot).getSearchComponent().inject(f)
+                PanelConfig(
+                        parallax = resources.getDimensionPixelSize(R.dimen.search_panel_paralax),
+                        touch = false,
+                        anchor = calculateRelativeOffset(resources.getDimensionPixelSize(R.dimen.search_panel_anchor)),
+                        state = SlidingUpPanelLayout.PanelState.ANCHORED)
+            }
+            is NearbyFragment -> {
+                PanelConfig(
+                        parallax = resources.getDimensionPixelSize(R.dimen.nearby_panel_paralax),
+                        touch = true,
+                        anchor = calculateRelativeOffset(resources.getDimensionPixelSize(R.dimen.nearby_panel_anchor)),
+                        state = SlidingUpPanelLayout.PanelState.COLLAPSED)
+            }
+            else -> return
+        }
+        configurePanel()
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        configurePanel()
     }
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding!!.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -95,17 +120,28 @@ class MainActivity : AppCompatActivity(), ContentView {
         }
 
         RxSearchView.queryTextChangeEvents(searchMenuItem.actionView as SearchView)
-                .filter { e -> e.queryText().length > 2 }
+                .filter    { e -> e.queryText().length > 2 }
                 .debounce(1, TimeUnit.SECONDS)
-                .filter { fragments.isAttached(SearchFragment.TAG) }
-                .subscribe { e ->
-                    fragments.find(SearchFragment.TAG, SearchFragment::class.java).onSearchTerm(e.queryText())
-                }
+                .filter    { fragments.isAttached(SearchFragment.TAG) }
+                .subscribe { e -> fragments.find(SearchFragment.TAG, SearchFragment::class.java).onSearchTerm(e.queryText()) }
 
         return true
     }
 
-    override val toolbar: Toolbar get() = binding.toolbar
+    fun calculateRelativeOffset(absoluteOffset: Int) : Float {
+        return (Resources.getSystem().displayMetrics.heightPixels - absoluteOffset) /
+                Resources.getSystem().displayMetrics.heightPixels.toFloat()
+    }
 
-    override val slidingPanel: SlidingUpPanelLayout get() = binding.slidingLayout
+    fun configurePanel() {
+        val panel = binding?.slidingLayout
+        if (panel != null ) {
+            with(panel) {
+                setParallaxOffset(panelConfig.parallax)
+                isTouchEnabled = panelConfig.touch
+                anchorPoint = panelConfig.anchor
+                panelState = panelConfig.state
+            }
+        }
+    }
 }
