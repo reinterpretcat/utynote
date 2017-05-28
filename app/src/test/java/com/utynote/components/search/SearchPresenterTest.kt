@@ -44,7 +44,7 @@ class SearchPresenterTest {
 
     @HttpResponse(path = "search/geojson/berlin")
     @Test
-    fun whenAttached_search_hasExpectedResult() {
+    fun whenSubscribed_search_hasExpectedResult() {
         presenter.subscribe(view)
 
         presenter.search("Berlin")
@@ -69,6 +69,18 @@ class SearchPresenterTest {
 
         assertThat<List<SearchViewModel.Busy>>(view.busy, emptyIterable<Any>())
         assertThat<List<SearchViewModel.Data>>(view.results, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Error>>(view.errors, emptyIterable<Any>())
+    }
+
+    @HttpResponse(path = "search/geojson/berlin")
+    @Test
+    fun whenSubscribedAfter_search_hasOneResult() {
+        presenter.search("Berlin")
+
+        presenter.subscribe(view)
+
+        assertThat<List<SearchViewModel.Busy>>(view.busy, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Data>>(view.results, hasSize<Any>(1))
         assertThat<List<SearchViewModel.Error>>(view.errors, emptyIterable<Any>())
     }
 
