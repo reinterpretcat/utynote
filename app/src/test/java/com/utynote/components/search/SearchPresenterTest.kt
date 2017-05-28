@@ -4,25 +4,18 @@ import com.utynote.test.annotations.HttpResponse
 import com.utynote.test.core.AnnotationHandler
 import com.utynote.test.dependencies.SearchComponentFactory
 import com.utynote.test.utils.Utils
-
+import io.reactivex.android.plugins.RxAndroidPlugins
 import org.hamcrest.Description
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
-import javax.inject.Inject
-
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.internal.schedulers.ImmediateThinScheduler
-
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.emptyIterable
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.hasSize
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
+import javax.inject.Inject
 
 class SearchPresenterTest {
     @Rule @JvmField val rule = AnnotationHandler()
@@ -32,7 +25,6 @@ class SearchPresenterTest {
 
     @Before
     fun setup() {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { ImmediateThinScheduler.INSTANCE }
         SearchComponentFactory.create().inject(this)
         view = SearchView()
     }
@@ -49,7 +41,7 @@ class SearchPresenterTest {
 
         presenter.search("Berlin")
 
-        assertThat<List<SearchViewModel.Busy>>(view.busy, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Busy>>(view.busy, hasSize<Any>(1))
         assertThat<List<SearchViewModel.Error>>(view.errors, emptyIterable<Any>())
         assertThat<List<SearchViewModel.Data>>(view.results, hasSize<Any>(1))
         assertThat(view.results[0].data, hasItem(match(SearchItemData(

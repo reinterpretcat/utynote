@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.utynote.R
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class SearchFragment : Fragment() {
@@ -16,7 +17,7 @@ class SearchFragment : Fragment() {
     @Inject lateinit var presenter: SearchPresenter
     private val adapter = SearchAdapter()
 
-    private lateinit var subscription : Subscription
+    private lateinit var subscription : Disposable
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?): View? {
         return inflater!!.inflate(R.layout.search_container_view, container, false)
@@ -28,26 +29,15 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        presenter.subscribe(object: Subscriber<SearchViewModel> {
-
-            override fun onSubscribe(s: Subscription) {
-                s.request(Long.MAX_VALUE)
-                subscription = s
-            }
-
-            override fun onNext(t: SearchViewModel) {
-                adapter.setModel(t)
-            }
-
-            override fun onError(t: Throwable?) { }
-
-            override fun onComplete() { }
-        })
+        subscription = Observable
+                            .fromPublisher(presenter)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe{ it -> adapter.setModel(it) }
     }
 
     override fun onPause() {
         super.onPause()
-        subscription.cancel()
+        subscription.dispose()
     }
 
     fun onSearchTerm(term: CharSequence) {

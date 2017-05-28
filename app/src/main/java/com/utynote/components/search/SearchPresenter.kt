@@ -3,7 +3,6 @@ package com.utynote.components.search
 import com.utynote.components.search.data.SearchProcessor
 import com.utynote.components.search.data.SearchResult
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.BehaviorProcessor
 import org.reactivestreams.Publisher
@@ -17,7 +16,6 @@ class SearchPresenter(private val processor: SearchProcessor) : Publisher<Search
     init {
         this.subscription = Observable
                 .fromPublisher(processor)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ this.onNext(it) }, { this.onError(it) })
     }
 
@@ -26,6 +24,7 @@ class SearchPresenter(private val processor: SearchProcessor) : Publisher<Search
     }
 
     fun search(term: String) {
+        behavior.onNext(SearchViewModel.Busy())
         processor.onNext(term)
     }
 
