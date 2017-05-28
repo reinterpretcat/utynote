@@ -44,7 +44,8 @@ class JsonSearchProcessor(private val service: SearchService) : SearchProcessor(
 
         subscription = service
                 .search(term)
-                .subscribe { data -> notifySubscribers(term, data) }
+                .subscribe ( { data -> notifySubscribers(term, data)},
+                             { error -> subscribers.forEach { s -> s.onError(error) }  })
     }
 
     override fun onError(t: Throwable) {}
@@ -52,7 +53,6 @@ class JsonSearchProcessor(private val service: SearchService) : SearchProcessor(
     override fun onComplete() {}
 
     private fun notifySubscribers(term: String, data: SearchData) {
-
         val places = data.features!!
                 .filter { f -> "Point" == f.geometry!!.type }
                 .map { f -> Place(id = f.properties!!.id!!,

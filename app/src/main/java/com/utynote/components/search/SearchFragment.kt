@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.utynote.R
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import javax.inject.Inject
 
 class SearchFragment : Fragment() {
 
     @Inject lateinit var presenter: SearchPresenter
     private val adapter = SearchAdapter()
+
+    private lateinit var subscription : Subscription
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, bundle: Bundle?): View? {
         return inflater!!.inflate(R.layout.search_container_view, container, false)
@@ -24,16 +28,26 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        presenter.attach(object : SearchContract.View {
-            override fun render(model: SearchContract.ViewModel) {
-                adapter.setModel(model)
+        presenter.subscribe(object: Subscriber<SearchViewModel> {
+
+            override fun onSubscribe(s: Subscription) {
+                s.request(Long.MAX_VALUE)
+                subscription = s
             }
+
+            override fun onNext(t: SearchViewModel) {
+                adapter.setModel(t)
+            }
+
+            override fun onError(t: Throwable?) { }
+
+            override fun onComplete() { }
         })
     }
 
     override fun onPause() {
         super.onPause()
-        presenter.detach()
+        subscription.cancel()
     }
 
     fun onSearchTerm(term: CharSequence) {

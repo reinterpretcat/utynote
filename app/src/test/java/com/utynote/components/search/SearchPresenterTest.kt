@@ -21,18 +21,20 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.emptyIterable
 import org.hamcrest.Matchers.hasItem
 import org.hamcrest.Matchers.hasSize
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 
 class SearchPresenterTest {
     @Rule @JvmField val rule = AnnotationHandler()
     @Inject lateinit var presenter: SearchPresenter
 
-    private var view: FakeSearchView? = null
+    private lateinit var view: SearchView
 
     @Before
     fun setup() {
-        SearchComponentFactory.create().inject(this)
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { ImmediateThinScheduler.INSTANCE }
-        view = FakeSearchView()
+        SearchComponentFactory.create().inject(this)
+        view = SearchView()
     }
 
     @After
@@ -43,13 +45,14 @@ class SearchPresenterTest {
     @HttpResponse(path = "search/geojson/berlin")
     @Test
     fun whenAttached_search_hasExpectedResult() {
-        presenter.attach(view!!)
+        presenter.subscribe(view)
 
         presenter.search("Berlin")
 
-        assertThat<List<SearchContract.ViewModel.Error>>(view!!.errors, emptyIterable<Any>())
-        assertThat<List<SearchContract.ViewModel.Data>>(view!!.results, hasSize<Any>(1))
-        assertThat(view!!.results[0].data, hasItem(match(SearchItemData(
+        assertThat<List<SearchViewModel.Busy>>(view.busy, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Error>>(view.errors, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Data>>(view.results, hasSize<Any>(1))
+        assertThat(view.results[0].data, hasItem(match(SearchItemData(
                 primaryTitle = "Berlin",
                 secondaryTitle = "",
                 primarySubtitle = "Germany",
@@ -58,14 +61,15 @@ class SearchPresenterTest {
 
     @HttpResponse(path = "search/geojson/berlin")
     @Test
-    fun whenDetached_search_hasNoResults() {
-        presenter.attach(view!!)
-        presenter.detach()
+    fun whenCancelledSubscription_search_hasNoResults() {
+        presenter.subscribe(view)
+        view.subscription.cancel()
 
         presenter.search("Berlin")
 
-        assertThat<List<SearchContract.ViewModel.Data>>(view!!.results, emptyIterable<Any>())
-        assertThat<List<SearchContract.ViewModel.Error>>(view!!.errors, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Busy>>(view.busy, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Data>>(view.results, emptyIterable<Any>())
+        assertThat<List<SearchViewModel.Error>>(view.errors, emptyIterable<Any>())
     }
 
     private fun match(model: SearchItemData): TypeSafeMatcher<SearchItemData> {
@@ -81,5 +85,30 @@ class SearchPresenterTest {
                 description.appendText("Search item with title: " + model.primaryTitle)
             }
         }
+    }
+
+    private class SearchView : Subscriber<SearchViewModel> {
+        lateinit var subscription: Subscription
+
+        val results: MutableList<SearchViewModel.Data> = ArrayList()
+        val errors: MutableList<SearchViewModel.Error> = ArrayList()
+        val busy: MutableList<SearchViewModel.Busy> = ArrayList()
+
+        override fun onSubscribe(s: Subscription) {
+            s.request(Long.MAX_VALUE)
+            subscription = s
+        }
+
+        override fun onNext(model: SearchViewModel) {
+            when (model) {
+                is SearchViewModel.Busy  -> busy.add(model)
+                is SearchViewModel.Error -> errors.add(model)
+                is SearchViewModel.Data  -> results.add(model)
+            }
+        }
+
+        override fun onError(t: Throwable?) { throw NotImplementedError() }
+
+        override fun onComplete()           { throw NotImplementedError() }
     }
 }
