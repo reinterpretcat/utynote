@@ -3,7 +3,6 @@ package com.utynote.components.search
 import com.utynote.test.annotations.HttpResponse
 import com.utynote.test.core.AnnotationHandler
 import com.utynote.test.dependencies.SearchComponentFactory
-import com.utynote.test.utils.Utils
 import io.reactivex.android.plugins.RxAndroidPlugins
 import org.hamcrest.Description
 import org.hamcrest.MatcherAssert.assertThat
@@ -79,10 +78,7 @@ class SearchPresenterTest {
     private fun match(model: SearchItemData): TypeSafeMatcher<SearchItemData> {
         return object : TypeSafeMatcher<SearchItemData>() {
             override fun matchesSafely(item: SearchItemData): Boolean {
-                return Utils.equals(model.primaryTitle, item.primaryTitle) &&
-                        Utils.equals(model.secondaryTitle, item.secondaryTitle) &&
-                        Utils.equals(model.primarySubtitle, item.primarySubtitle) &&
-                        Utils.equals(model.secondarySubtitle, item.secondarySubtitle)
+                return model == item
             }
 
             override fun describeTo(description: Description) {
