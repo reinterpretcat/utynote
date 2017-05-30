@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
                                val anchor: Float,
                                val state : SlidingUpPanelLayout.PanelState)
 
-    private val navListener = NavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
+    private val navListener = NavigationView.OnNavigationItemSelectedListener {
+        when (it.itemId) {
             R.id.nav_notes    -> { }
             R.id.nav_places   -> { }
             R.id.nav_calendar -> { }
