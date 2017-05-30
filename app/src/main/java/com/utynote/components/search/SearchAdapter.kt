@@ -7,32 +7,31 @@ import com.utynote.R
 import com.utynote.databinding.SearchViewBusyBinding
 import com.utynote.databinding.SearchViewErrorBinding
 import com.utynote.databinding.SearchViewItemBinding
+import com.utynote.extensions.Either
+import com.utynote.extensions.getOrThrow
+
+typealias EitherBinding = Either<SearchViewBusyBinding, SearchViewItemBinding, SearchViewErrorBinding>
 
 internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     private var model: SearchViewModel? = null
 
-    override fun getItemViewType(position: Int): Int {
-        when (model) {
-            is SearchViewModel.Busy -> return R.layout.search_view_busy
-            is SearchViewModel.Error -> return  R.layout.search_view_error
-            else -> return R.layout.search_view_item
-        }
+    override fun getItemViewType(position: Int): Int  = when (model) {
+        is SearchViewModel.Busy -> R.layout.search_view_busy
+        is SearchViewModel.Error -> R.layout.search_view_error
+        else -> R.layout.search_view_item
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-
-        when (viewType) {
-            R.layout.search_view_busy ->  return ViewHolder(SearchViewBusyBinding.inflate(layoutInflater, parent, false))
-            R.layout.search_view_error -> return ViewHolder(SearchViewErrorBinding.inflate(layoutInflater, parent, false))
-            else ->                       return ViewHolder(SearchViewItemBinding.inflate(layoutInflater, parent, false))
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            R.layout.search_view_busy -> ViewHolder(Either.First<SearchViewBusyBinding>(SearchViewBusyBinding.inflate(inflater, parent, false)))
+            R.layout.search_view_error -> ViewHolder(Either.Third<SearchViewErrorBinding>(SearchViewErrorBinding.inflate(inflater, parent, false)))
+            else -> ViewHolder(Either.Second<SearchViewItemBinding>(SearchViewItemBinding.inflate(inflater, parent, false)))
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(model!!, position)
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(model!!, position)
 
     override fun getItemCount(): Int {
         val m = model
@@ -48,23 +47,12 @@ internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() 
         notifyDataSetChanged()
     }
 
-    internal class ViewHolder : RecyclerView.ViewHolder {
-        private var mBusyBinding: SearchViewBusyBinding? = null
-        private var mItemBinding: SearchViewItemBinding? = null
-        private var mErrorBinding: SearchViewErrorBinding? = null
+    internal class ViewHolder(val binding : EitherBinding) : RecyclerView.ViewHolder(binding.fold( {it.root}, {it.root}, {it.root})) {
 
-        constructor(binding: SearchViewBusyBinding) : super(binding.root)  { mBusyBinding = binding }
-
-        constructor(binding: SearchViewErrorBinding) : super(binding.root) { mErrorBinding = binding }
-
-        constructor(binding: SearchViewItemBinding) : super(binding.root)  { mItemBinding = binding }
-
-        fun bind(model : SearchViewModel, position : Int) {
-            when (model) {
-                is SearchViewModel.Busy ->  mBusyBinding!!.model = model.progress
-                is SearchViewModel.Error -> mErrorBinding!!.model = model.description
-                is SearchViewModel.Data ->  mItemBinding!!.model = model.data[position]
-            }
+        fun bind(model : SearchViewModel, position : Int) = when (model) {
+            is SearchViewModel.Busy  -> binding.firstProjection().getOrThrow() .model = model.progress
+            is SearchViewModel.Data  -> binding.secondProjection().getOrThrow().model = model.data[position]
+            is SearchViewModel.Error -> binding.thirdProjection().getOrThrow() .model = model.description
         }
     }
 }
