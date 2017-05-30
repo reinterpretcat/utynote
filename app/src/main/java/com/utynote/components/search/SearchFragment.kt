@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.utynote.R
+import com.utynote.extensions.hideKeyboardOnTouch
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -25,6 +26,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         (view as RecyclerView).adapter = adapter
+        view.hideKeyboardOnTouch()
     }
 
     override fun onResume() {
