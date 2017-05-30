@@ -24,7 +24,7 @@ class SearchPresenter(private val processor: SearchProcessor) : Publisher<Search
     }
 
     fun search(term: String) {
-        behavior.onNext(SearchViewModel.Busy())
+        behavior.onNext(SearchViewModel.Busy(term))
         processor.onNext(term)
     }
 

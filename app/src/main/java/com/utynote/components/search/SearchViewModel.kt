@@ -2,7 +2,7 @@ package com.utynote.components.search
 
 sealed class SearchViewModel {
 
-    class Busy : SearchViewModel()
+    class Busy(val progress: String) : SearchViewModel()
 
     class Error(val description: String) : SearchViewModel()
 

@@ -31,12 +31,7 @@ internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val m = model
-        when (m) {
-            is SearchViewModel.Busy -> holder.bind()
-            is SearchViewModel.Error -> holder.bind(m.description)
-            is SearchViewModel.Data -> holder.bind(m.data[position])
-        }
+        holder.bind(model!!, position)
     }
 
     override fun getItemCount(): Int {
@@ -54,23 +49,22 @@ internal class SearchAdapter : RecyclerView.Adapter<SearchAdapter.ViewHolder>() 
     }
 
     internal class ViewHolder : RecyclerView.ViewHolder {
-        private var mErrorBinding: SearchViewErrorBinding? = null
+        private var mBusyBinding: SearchViewBusyBinding? = null
         private var mItemBinding: SearchViewItemBinding? = null
+        private var mErrorBinding: SearchViewErrorBinding? = null
 
-        constructor(binding: SearchViewBusyBinding) : super(binding.root)
+        constructor(binding: SearchViewBusyBinding) : super(binding.root)  { mBusyBinding = binding }
 
-        constructor(binding: SearchViewErrorBinding) : super(binding.root) {
-            mErrorBinding = binding
+        constructor(binding: SearchViewErrorBinding) : super(binding.root) { mErrorBinding = binding }
+
+        constructor(binding: SearchViewItemBinding) : super(binding.root)  { mItemBinding = binding }
+
+        fun bind(model : SearchViewModel, position : Int) {
+            when (model) {
+                is SearchViewModel.Busy ->  mBusyBinding!!.model = model.progress
+                is SearchViewModel.Error -> mErrorBinding!!.model = model.description
+                is SearchViewModel.Data ->  mItemBinding!!.model = model.data[position]
+            }
         }
-
-        constructor(binding: SearchViewItemBinding) : super(binding.root) {
-            mItemBinding = binding
-        }
-
-        fun bind() {}
-
-        fun bind(model: String) { mErrorBinding!!.model = model }
-
-        fun bind(model: SearchItemData) { mItemBinding!!.model = model }
     }
 }
